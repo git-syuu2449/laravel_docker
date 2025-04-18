@@ -1,0 +1,42 @@
+version: '3'
+services:
+  l11dev-nginx:
+    container_name: "l11dev-nginx"
+    build:
+      context: ./docker/nginx
+    depends_on:
+      - l11dev-app
+    ports:
+      - 80:80
+    volumes:
+      - ./:/src
+
+  l11dev-app:
+    container_name: "l11dev-app"
+    build:
+      context: ./docker/php
+    depends_on:
+      - l11dev-mysql
+    volumes:
+      - ./:/src
+      - /src/node_modules
+      - /src/vendor
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+
+  l11dev-mysql:
+    image: mysql:8.0.37
+    command: --max_allowed_packet=32505856
+    container_name: "l11dev-mysql"
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=l11dev
+    ports:
+      - 3306:3306
+
+  l11dev-redis:
+    image: redis:alpine
+    container_name: "l11dev-redis"
+    ports:
+      - 16379:6379
