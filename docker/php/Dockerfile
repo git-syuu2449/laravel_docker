@@ -1,22 +1,40 @@
 FROM php:8.3-fpm
 
+# ホストの UID/GID を引数で受け取る（デフォルト1000）
+ARG UID=1000
+ARG GID=1000
+
+# 必要パッケージのインストール
 RUN apt-get update \
-  && apt-get install -y zlib1g-dev mariadb-client vim libzip-dev \
+  && apt-get install -y \
+    zlib1g-dev \
+    mariadb-client \
+    vim \
+    libzip-dev \
+    unzip \
   && docker-php-ext-install zip pdo_mysql
 
-#Composer install
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php composer-setup.php
-RUN php -r "unlink('composer-setup.php');"
-RUN mv composer.phar /usr/local/bin/composer
+# UID/GID に合わせたユーザー・グループ作成
+RUN groupadd -g ${GID} appuser \
+  && useradd -u ${UID} -g ${GID} -m appuser
 
-ENV COMPOSER_ALLOW_SUPERUSER 1
+# ディレクトリ作成
+RUN mkdir -p /composer && chown appuser:appuser /composer
 
-ENV COMPOSER_HOME /composer
+# Composer のインストール
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+  && php composer-setup.php \
+  && php -r "unlink('composer-setup.php');" \
+  && mv composer.phar /usr/local/bin/composer
 
-ENV PATH $PATH:/composer/vendor/bin
+# Composer 設定
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV COMPOSER_HOME=/composer
+ENV PATH="$PATH:/composer/vendor/bin"
 
-
+# 作業ディレクトリ設定
 WORKDIR /var/www
 
+# Laravel installer をグローバルインストール（ユーザー切り替え後）
+USER appuser
 RUN composer global require "laravel/installer"

@@ -1,30 +1,37 @@
+# Laravel 基本
 /vendor/
-node_modules/
+/node_modules/
+/.env
+.env.*
+.phpunit.result.cache
+.phpactor.json
+auth.json
+
+# Laravel ストレージ・ビルド
+/storage/*
+!storage/.gitignore
+/bootstrap/cache/*
+!bootstrap/cache/.gitignore
+/public/build
+/public/storage
+/public/hot
+
+# DB & Docker関連
+docker/db/data/
+docker/db/*.pid
+docker/db/*.sock
+docker/db/*.err
+docker/db/undo_*
+docker/db/binlog*
+docker/db/ibtmp*
+
+# ログ・キャッシュ
+*.log
+*.cache
 npm-debug.log
 yarn-error.log
 
-# Laravel 4 specific
-bootstrap/compiled.php
-app/storage/
-
-# Laravel 5 & Lumen specific
-public/storage
-public/hot
-
-# Laravel 5 & Lumen specific with changed public path
-public_html/storage
-public_html/hot
-
-storage/*.key
-.env
-Homestead.yaml
-Homestead.json
-/.vagrant
-.phpunit.result.cache
-
-/public/build
-/storage/pail
-.env.backup
-.env.production
-.phpactor.json
-auth.json
+# OSやIDEのゴミ
+.DS_Store
+.idea/
+.vscode/
