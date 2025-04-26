@@ -12,6 +12,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            // 一対多
+            QuestionSeeder::class,
+        ]);
     }
 
 }
