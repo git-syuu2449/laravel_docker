@@ -38,3 +38,17 @@ WORKDIR /var/www
 # Laravel installer をグローバルインストール（ユーザー切り替え後）
 USER appuser
 RUN composer global require "laravel/installer"
+
+
+# Tailwind をインストールする準備
+# Node.jsをインストール
+
+USER root
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+  && apt-get install -y nodejs \
+  && npm install -g npm
+
+# 権限変更(本番では777以外に変更)
+RUN mkdir -p /var/www/laravel-project/storage /var/www/laravel-project/bootstrap/cache && \
+  chown -R appuser:appuser /var/www/laravel-project/storage /var/www/laravel-project/bootstrap/cache && \
+  chmod -R 777 /var/www/laravel-project/storage /var/www/laravel-project/bootstrap/cache

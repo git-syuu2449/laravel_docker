@@ -1,0 +1,29 @@
+# OS・エディタの設定ファイル
+.DS_Store
+.idea
+.vscode
+*.swp
+
+# Git関連
+.git
+.gitignore
+
+# Laravel特有のキャッシュ系
+/vendor
+/node_modules
+/public/storage
+/storage/*.key
+/storage/framework/*
+/storage/logs/*
+
+# Docker関連（MySQLなどのデータファイル）
+docker/db/data
+docker/db/mysql
+
+# 環境ファイル（セキュリティ上ビルドに含めない）
+.env
+
+# テスト結果やログ
+phpunit.xml
+coverage/
+*.log
