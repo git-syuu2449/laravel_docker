@@ -9,6 +9,9 @@ services:
         GID: ${GID}
     volumes:
       - .:/var/www
+    # vote
+    ports:
+     - 5173:5173
 
   nginx:
     image: nginx

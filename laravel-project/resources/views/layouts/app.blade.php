@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>@yield('title', 'デフォルトタイトル')</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    @stack('css')
+    @once
+        @vite(['resources/css/app.css'])
+        @stack('css')
+
+        @vite(['resources/js/app.js'])
+        @stack('scripts')
+    @endonce
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -15,8 +20,5 @@
     </main>
 
     <x-footer />
-
-    <script src="{{ asset('js/app.js') }}"></script>
-    @stack('scripts')
 </body>
 </html>
