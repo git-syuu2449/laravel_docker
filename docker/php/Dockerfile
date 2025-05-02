@@ -54,3 +54,6 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
 RUN mkdir -p /var/www/laravel-project/storage /var/www/laravel-project/bootstrap/cache && \
   chown -R appuser:appuser /var/www/laravel-project/storage /var/www/laravel-project/bootstrap/cache && \
   chmod -R 777 /var/www/laravel-project/storage /var/www/laravel-project/bootstrap/cache
+
+# debugger
+RUN composer require barryvdh/laravel-debugbar --dev

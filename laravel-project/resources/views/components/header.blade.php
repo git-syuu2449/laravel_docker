@@ -4,8 +4,7 @@
         <nav>
             <ul class="flex space-x-4">
                 <li><a href="/" class="hover:underline">Home</a></li>
-                <li><a href="/questions" class="hover:underline">質問一覧</a></li>
-                <li><a href="/contact" class="hover:underline">お問い合わせ</a></li>
+                <li><a href="{{ route('questions.index') }}" class="hover:underline">質問一覧</a></li>
             </ul>
         </nav>
     </div>

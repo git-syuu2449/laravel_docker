@@ -14,7 +14,6 @@ class QuestionController extends Controller
     {
         $questions = Question::all();
         return view(view: 'questions.index', data: compact('questions'));
-        // return view(view: 'question.index');
     }
 
     /**
@@ -22,7 +21,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        //
+        return view(view: 'questions.create');
     }
 
     /**

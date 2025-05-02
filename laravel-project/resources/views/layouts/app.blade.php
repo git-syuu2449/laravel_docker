@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>@yield('title', 'デフォルトタイトル')</title>
+    {{-- css,jsの読み込み --}}
     @once
         @vite(['resources/css/app.css'])
-        @stack('css')
-
-        @vite(['resources/js/app.js'])
-        @stack('scripts')
     @endonce
+    @stack('css')
+    @once
+        @vite(['resources/js/app.js'])
+    @endonce
+    @stack('scripts')
 </head>
 <body class="min-h-screen flex flex-col">
 
