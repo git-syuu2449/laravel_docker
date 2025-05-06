@@ -48,7 +48,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
   && apt-get install -y nodejs \
   && npm install -g npm \
   && npm remove glob \
-  && npm install glob@7
+  && npm install glob@7 \
+  && npm install vue \
+  && npm install @vitejs/plugin-vue
 
 # 権限変更(本番では777以外に変更)
 RUN mkdir -p /var/www/laravel-project/storage /var/www/laravel-project/bootstrap/cache && \
