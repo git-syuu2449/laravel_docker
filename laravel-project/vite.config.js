@@ -18,11 +18,11 @@ function getFiles(pattern, ignoreList = []) {
 // ビルド対象外のjsを管理
 const ignoreJsList = [
     'resources/js/vendor/**',
-    'resources/css/_template/**',
 ];
-// ビルド対象外のjsを管理
+const ignoreComponentList = [
+];
+// ビルド対象外のcssを管理
 const ignoreCssList = [
-    'resources/js/vendor/**',
     'resources/css/_template/**',
 ];
 // ... を使った配列のアンパック
@@ -33,10 +33,17 @@ export default defineConfig({
         // host: '0.0.0.0',
         strictPort: true
       },
+    resolve: {
+        alias: {
+            'vue': 'vue/dist/vue.esm-bundler.js',
+        },
+    },
     plugins: [
         laravel({
             input: [
                 ...getFiles('resources/js/**/*.js', ignoreJsList),
+                // vueファイルはconfig.jsに記載するとビルドされないためここには書かない
+                // ...getFiles('resources/js/components/*.vue', ignoreComponentList),
                 ...getFiles('resources/css/**/*.css', ignoreCssList),
             ],
             refresh: true,
@@ -44,3 +51,4 @@ export default defineConfig({
         vue(),
     ],
 });
+

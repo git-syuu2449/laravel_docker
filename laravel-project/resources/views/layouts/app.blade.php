@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>@yield('title', 'デフォルトタイトル')</title>
-    {{-- css,jsの読み込み --}}
-    @once
-        @vite(['resources/css/app.css'])
-    @endonce
+
+    {{-- 共通のCSS --}}
+    @vite(['resources/css/app.css'])
+
+    {{-- ページごとのCSS --}}
     @stack('css')
-    @once
-        @vite(['resources/js/app.js'])
-    @endonce
-    @stack('scripts')
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -22,5 +19,11 @@
     </main>
 
     <x-footer />
+
+    {{-- 共通のJS --}}
+    @vite(['resources/js/app.js'])
+
+    {{-- ページごとのJSはbody末尾で読み込む --}}
+    @stack('scripts')
 </body>
 </html>
