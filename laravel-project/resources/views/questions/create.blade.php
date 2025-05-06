@@ -9,11 +9,13 @@
     <script type="module" src="{{ Vite::asset('resources/js/questions/create.js') }}"></script>
 @endpush
 
-@section('content')
-    <h2>質問登録</h2>
+@section(section: 'content')
+    <section class="'text-gray-600 w-full flex flex-col items-center px-2">
+        <h2 class="text-3xl font-bold mt-10">質問登録</h2>
 
-    <div id="app-vue">
-        <question-form></question-form>
-        <test-component></test-component>
-    </div>
+        <div id="app-vue">
+            <question-form></question-form>
+            <test-component></test-component>
+        </div>
+    </section>
 @endsection
