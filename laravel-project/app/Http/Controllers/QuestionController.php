@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Question;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreQuestionRequest;
 
 class QuestionController extends Controller
 {
@@ -21,15 +22,33 @@ class QuestionController extends Controller
      */
     public function create()
     {
+        \Log::debug('セッションの old 入力値:', session()->getOldInput()); // debug
+        \Log::debug('セッションのバリデーションエラー:', session('errors') ? session('errors')->all() : []); // debug
         return view(view: 'questions.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreQuestionRequest $request)
     {
-        //
+        // バリデーション処理
+        $validated = $request->validated();
+
+        // バリデーション通過後の処理
+        \Log::debug($validated); // debug
+        // dd($request->all()); // debug
+        // 登録処理
+        // Question::create($validated);
+        // 個別に登録処理
+        Question::create([
+            'question_text' => $validated['question_text'],
+            'pub_date' => now()
+        ]);
+
+        // 一覧画面に遷移
+        return redirect()->route('questions.index', ['p' => 1])
+        ->with('status', '質問登録に成功しました');
     }
 
     /**
