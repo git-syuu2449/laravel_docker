@@ -24,7 +24,7 @@ Route::controller(QuestionController::class)
 ->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/create', 'create')->name('create');
-    Route::get('/createA', 'create')->name('createA');
+    Route::get('/createA', 'createA')->name('createA');
     Route::get('/{id}', 'show')->name('show');
     Route::post('/', 'store')->name('store');
 });

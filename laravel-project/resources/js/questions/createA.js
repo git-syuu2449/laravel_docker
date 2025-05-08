@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import QuestionForm from '../components/QuestionForm.vue';
+import QuestionForm from '../components/QuestionAForm.vue';
 
 const app = createApp({});
 app.component('question-form', QuestionForm);

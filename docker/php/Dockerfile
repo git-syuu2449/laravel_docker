@@ -39,6 +39,8 @@ WORKDIR /var/www
 USER appuser
 RUN composer global require "laravel/installer"
 
+USER root
+
 # Tailwind をインストールする準備
 # Node.jsをインストール
 
@@ -56,8 +58,6 @@ RUN composer require barryvdh/laravel-debugbar --dev
 # validation lang
 RUN composer require laravel-lang/lang 
 #RUN composer require laravel-lang/publisher
-
-USER root
 
 # 権限変更(本番では777以外に変更)
 RUN mkdir -p /var/www/laravel-project/storage /var/www/laravel-project/bootstrap/cache && \

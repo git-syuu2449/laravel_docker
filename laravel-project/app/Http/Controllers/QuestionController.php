@@ -22,9 +22,14 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        \Log::debug('セッションの old 入力値:', session()->getOldInput()); // debug
-        \Log::debug('セッションのバリデーションエラー:', session('errors') ? session('errors')->all() : []); // debug
+        self::outputLog();
         return view(view: 'questions.create');
+    }
+
+    public function createA()
+    {
+        self::outputLog();
+        return view(view: 'questions.createA');
     }
 
     /**
@@ -32,6 +37,7 @@ class QuestionController extends Controller
      */
     public function store(StoreQuestionRequest $request)
     {
+        \Log::debug($request); // debug
         // バリデーション処理
         $validated = $request->validated();
 
@@ -45,6 +51,8 @@ class QuestionController extends Controller
             'question_text' => $validated['question_text'],
             'pub_date' => now()
         ]);
+
+        // return response()->json(['message' => '登録完了'], 201);
 
         // 一覧画面に遷移
         return redirect()->route('questions.index', ['p' => 1])
@@ -81,5 +89,11 @@ class QuestionController extends Controller
     public function destroy(Question $question)
     {
         //
+    }
+
+    private function outputLog()
+    {
+        \Log::debug('セッションの old 入力値:', session()->getOldInput()); // debug
+        \Log::debug('セッションのバリデーションエラー:', session('errors') ? session('errors')->all() : []); // debug
     }
 }
