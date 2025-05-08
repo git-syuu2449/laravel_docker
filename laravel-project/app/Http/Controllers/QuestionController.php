@@ -62,9 +62,13 @@ class QuestionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Question $question)
+    public function show($id)
     {
-        //
+        // $question = Question::findOrFail($id)->choices;
+        // $question = Question::getLeftQuestionWithChoices($id);
+        $question = Question::WithChoices()->id($id)->first();
+        dump($question->toArray()); //debug
+        return view(view: 'questions.show',data: compact('question'));
     }
 
     /**

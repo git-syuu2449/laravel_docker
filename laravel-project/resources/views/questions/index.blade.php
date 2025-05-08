@@ -44,6 +44,9 @@
                     <p>
                         {{ $question->question_text }}
                     </p>
+                    <a href="{{ route('questions.show', $question->id) }}">
+                        評価
+                    </a>
                 </li>
             @endforeach
         </ul>
