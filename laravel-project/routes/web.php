@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ChoiceController;
 
 // Question(個別)
 // Route::get(uri: "/questions", action: "App\Http\Controllers\QuestionController@index")->name('questions.index');
@@ -28,3 +29,6 @@ Route::controller(QuestionController::class)
     Route::get('/{id}', 'show')->name('show');
     Route::post('/', 'store')->name('store');
 });
+
+Route::post(uri: '/questions/{id}/choices', action: [ChoiceController::class, 'store'])->name('choices.store');
+

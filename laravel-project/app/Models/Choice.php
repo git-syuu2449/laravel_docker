@@ -15,6 +15,12 @@ class Choice extends Model
     use HasFactory;
     use SoftDeletes;
 
+    /**
+     * 入力可能なカラム
+     * @var array
+     */
+    protected $fillable = ['question_id', 'choice_text', 'votes'];
+
     public function question()
     {
         return $this->belongsTo(Question::class);

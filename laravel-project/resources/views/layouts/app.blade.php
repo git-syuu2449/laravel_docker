@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @csrf
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'デフォルトタイトル')</title>
 
-    {{-- 共通のCSS --}}
-    @vite(['resources/css/app.css'])
+    {{-- 共通のCSS.JS --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     {{-- ページごとのCSS --}}
     @stack('css')
@@ -21,9 +22,6 @@
     </main>
 
     <x-footer />
-
-    {{-- 共通のJS --}}
-    @vite(['resources/js/app.js'])
 
     {{-- ページごとのJSはbody末尾で読み込む --}}
     @stack('scripts')

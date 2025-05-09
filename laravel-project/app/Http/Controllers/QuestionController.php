@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreQuestionRequest;
@@ -37,12 +38,12 @@ class QuestionController extends Controller
      */
     public function store(StoreQuestionRequest $request)
     {
-        \Log::debug($request); // debug
+        Log::debug($request); // debug
         // バリデーション処理
         $validated = $request->validated();
 
         // バリデーション通過後の処理
-        \Log::debug($validated); // debug
+        Log::debug($validated); // debug
         // dd($request->all()); // debug
         // 登録処理
         // Question::create($validated);
@@ -67,7 +68,7 @@ class QuestionController extends Controller
         // $question = Question::findOrFail($id)->choices;
         // $question = Question::getLeftQuestionWithChoices($id);
         $question = Question::WithChoices()->id($id)->first();
-        dump($question->toArray()); //debug
+        // dump($question->toArray()); //debug
         return view(view: 'questions.show',data: compact('question'));
     }
 
@@ -97,7 +98,7 @@ class QuestionController extends Controller
 
     private function outputLog()
     {
-        \Log::debug('セッションの old 入力値:', session()->getOldInput()); // debug
-        \Log::debug('セッションのバリデーションエラー:', session('errors') ? session('errors')->all() : []); // debug
+        Log::debug('セッションの old 入力値:', session()->getOldInput()); // debug
+        Log::debug('セッションのバリデーションエラー:', session('errors') ? session('errors')->all() : []); // debug
     }
 }

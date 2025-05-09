@@ -16,7 +16,8 @@
     <p v-if="success" class="text-green-600 mt-2">登録が完了しました</p>
   </form>
 </template>
-  
+
+<!-- Vue2向けの書き方 -->
 <script>
 import axios from 'axios'
 

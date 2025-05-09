@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
-class StoreQuestionRequest extends BaseFormRequest
+class StoreChoiceRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,9 @@ class StoreQuestionRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'question_text' => ['required', 'string', 'max:255', 'min:10'],
-            // 'body'  => ['required', 'string', 'max:255'],
+            // 'question_id' => ['required', 'numeric'],
+            'choice_text' => ['required', 'string', 'max:255', 'min:10'],
+            'votes' => ['required', 'numeric', 'between:0,5'],
         ];
     }
 
@@ -34,8 +35,6 @@ class StoreQuestionRequest extends BaseFormRequest
      */
     protected function prepareForValidation()
     {
-        // 入力データ取得
-        $question_text = $this->input('question_text');
     }
 
     /**
@@ -45,9 +44,6 @@ class StoreQuestionRequest extends BaseFormRequest
      */
     public function withValidator(Validator $validator): void
     {
-        $validator->after(function (Validator $validator) {
-            $question_text = $this->input('question_text');
-        });
     }
 
     /**
@@ -56,39 +52,36 @@ class StoreQuestionRequest extends BaseFormRequest
      */
     protected function passedValidation()
     {
-        $question_text = $this->input('question_text');
     }
 
     /**
      * エラーメッセージの定義
-     * @return array{body.min: string, question_text.required: string}
+     * @return array{body.min: string, choice_text.required: string}
      */
     public function messages()
     {
         return [
-            'question_text.required',
-            'question_text.max',
-            'question_text.min'
+            'choice_text.required',
+            'choice_text.max',
+            'choice_text.min',
+            // votes
+            'votes.required',
+            // 通常起こり得ないエラーの為個別に設定
+            'votes.numeric' => '不正な値です。',
+            'votes.between' => '不正な値です。',
+
         ];
-        // validation.phpを参照するようにした
-        /*
-        return [
-            // question_text
-            'question_text.required' => ':attribute は必須です。',
-            'question_text.max' => ':attribute は :max 文字まで入力可能です。',
-            'question_text.min' => ':attribute は最低 :min 文字必要です。',
-        ];
-        */
     }
 
     /**
      * 属性名の定義
-     * @return array{body: string, question_text: string}
+     * @return array{}
      */
     public function attributes()
     {
         return [
-            'question_text' => '質問内容',
+            'choice_text' => '評価内容',
+            'votes' => '評価',
         ];
     }
 }

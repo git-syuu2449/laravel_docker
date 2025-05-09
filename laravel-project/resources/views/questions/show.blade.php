@@ -13,12 +13,30 @@
     <section class="'text-gray-600 w-full flex flex-col items-center px-2">
         <h2 class="text-3xl font-bold mt-10">質問詳細</h2>
 
-        <h3>
-            {{ $question->question_text }}
-        </h3>
+        @if (session('message'))
+            <div class="alert alert-success">
+                {{ session('message') }}
+            </div>
+        @endif
+
         <span>
             {{ $question->pub_date }}
         </span>
+        <h3>
+            {{ $question->question_text }}
+        </h3>
+
+
+        <div id="app-vue">
+            <choice-modal-wrapper
+                {{-- :errors='@json($errors->toArray())'
+                :old='@json(old())' --}}
+                :post-url="'{{ route('choices.store', $question->id) }}'"
+                :question-id="{{ $question->id }}"
+            ></choice-modal-wrapper>
+        </div>
+        {{-- <button class="relative overflow-hidden rounded-md bg-neutral-950 px-5 py-2.5 text-white duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:translate-y-1 active:scale-x-110 active:scale-y-90">評価する</button> --}}
+
 
         @if ($question->choices->isEmpty())
             <span>

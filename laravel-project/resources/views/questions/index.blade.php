@@ -1,16 +1,14 @@
 @extends('layouts.app')
 
+@push('css')
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/questions/index.css') }}" />
+@endpush
+
+@push('scripts')
+    <script type="module" src="{{ Vite::asset('resources/js/questions/index.js') }}"></script>
+@endpush
+
 @section('title', '質問一覧')
-    @push('css')
-        @once
-            @vite(['resources/css/questions/index.css'])
-        @endonce
-    @endpush
-    @push('scripts')
-        @once
-            @vite(['resources/js/questions/index.js'])
-        @endonce
-    @endpush
 
 @section('content')
     <h2>質問一覧</h2>
