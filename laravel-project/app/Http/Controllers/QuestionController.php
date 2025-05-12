@@ -56,8 +56,8 @@ class QuestionController extends Controller
         // return response()->json(['message' => '登録完了'], 201);
 
         // 一覧画面に遷移
-        return redirect()->route('questions.index', ['p' => 1])
-        ->with('status', '質問登録に成功しました');
+        return redirect()->route('questions.index')
+            ->with('status', '質問登録に成功しました');
     }
 
     /**

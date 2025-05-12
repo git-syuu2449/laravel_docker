@@ -21,7 +21,7 @@ class QuestionFactory extends Factory
     public function definition(): array
     {
         return [
-            'question_text' => $this->faker->unique()->realText(),
+            'question_text' => $this->faker->unique()->realText(200),
             'pub_date' => now(),
         ];
     }
