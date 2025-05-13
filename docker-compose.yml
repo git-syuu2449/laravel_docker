@@ -7,8 +7,10 @@ services:
       args:
         UID: ${UID}
         GID: ${GID}
+    user: "${UID}:${GID}" 
     volumes:
       - .:/var/www
+      - ~/.docker_bash_history:/appuser/.bash_history
     # vote
     ports:
      - 5173:5173
