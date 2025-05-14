@@ -1,6 +1,15 @@
 # laravel_docker
 Launch Laravel with Docker
 
+## 初回起動時
+### composer等の実行
+```
+docker compose exec app bash
+cd /var/www/laravel-project
+./setup.sh
+```
+
+### .envの設定
 .env例
 
 ```
