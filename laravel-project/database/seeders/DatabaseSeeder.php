@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // 一対多
             QuestionSeeder::class,
+            // ユーザー
+            UserSeeder::class,
         ]);
     }
 
