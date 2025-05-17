@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ChoiceController;
 
+use App\Http\Controllers\Admin\DashboardController as AdminDashboradController;
+use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+
+// ログイン関連
+require __DIR__.'/auth.php';
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -20,9 +27,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-require __DIR__.'/auth.php';
-
 
 // Question(個別)
 // Route::get(uri: "/questions", action: "App\Http\Controllers\QuestionController@index")->name('questions.index');
@@ -50,3 +54,17 @@ Route::controller(QuestionController::class)
 });
 
 Route::post(uri: '/questions/{id}/choices', action: [ChoiceController::class, 'store'])->name('choices.store');
+
+
+
+// 管理画面
+Route::get(uri: 'admin/',action:  [ AdminDashboradController::class, 'index'])->name('admin.dashboard');
+
+Route::controller(AdminQuestionController::class)
+->prefix('questions')
+->as('questions.')
+->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/{id}', 'show')->name('show');
+    Route::post('/', 'store')->name('store');
+});

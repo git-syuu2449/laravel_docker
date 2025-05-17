@@ -58,4 +58,31 @@ class User extends Authenticatable
     protected $casts = [
         'role' => Role::class,
     ];
+
+    /**
+     * 管理者か
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === Role::Admin;
+    }
+
+    /**
+     * 一般ユーザーか
+     * @return bool
+     */
+    public function isGeneral(): bool
+    {
+        return $this->role === Role::User;
+    }
+
+    /**
+     * ゲストか
+     * @return bool
+     */
+    public function isGuest(): bool
+    {
+        return $this->role === Role::Guest;
+    }
 }

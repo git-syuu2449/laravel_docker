@@ -28,6 +28,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // 権限に応じて遷移先を切り分ける。
+        $user = Auth::user();
+
+        if ($user->role === $user->role::Admin) {
+            return redirect()->intended(route('admin.dashboard'));
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
