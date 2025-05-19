@@ -1,9 +1,34 @@
 <?php
 
+use App\Enums\Role;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+# 独自追加
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ChoiceController;
+
+use App\Http\Controllers\Admin\DashboardController as AdminDashboradController;
+use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+
+// ログイン関連
+require __DIR__.'/auth.php';
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified', 'role:'.Role::User->value])
+->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 // Question(個別)
 // Route::get(uri: "/questions", action: "App\Http\Controllers\QuestionController@index")->name('questions.index');
@@ -28,7 +53,23 @@ Route::controller(QuestionController::class)
     Route::get('/createA', 'createA')->name('createA');
     Route::get('/{id}', 'show')->name('show');
     Route::post('/', 'store')->name('store');
-});
+})->middleware(['auth', 'verified', 'role:'.Role::User->value]);
 
-Route::post(uri: '/questions/{id}/choices', action: [ChoiceController::class, 'store'])->name('choices.store');
+Route::post(uri: '/questions/{id}/choices', action: [ChoiceController::class, 'store'])->name('choices.store')
+->middleware(['auth', 'verified', 'role:'.Role::User->value]);
 
+
+
+// 管理画面
+Route::get(uri: 'admin/',action:  [ AdminDashboradController::class, 'index'])
+->middleware(['auth', 'verified', 'role:' . Role::Admin->value])
+->name('admin.dashboard');
+
+Route::controller(AdminQuestionController::class)
+->prefix('admin.questions')
+->as('admin.questions.')
+->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/{id}', 'show')->name('show');
+    Route::post('/', 'store')->name('store');
+})->middleware(['auth', 'verified', 'role:'.Role::Admin->value]);
