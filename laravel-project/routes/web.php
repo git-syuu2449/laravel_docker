@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Role;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,7 +21,8 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'role:'.Role::User->value])
+->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -51,20 +53,23 @@ Route::controller(QuestionController::class)
     Route::get('/createA', 'createA')->name('createA');
     Route::get('/{id}', 'show')->name('show');
     Route::post('/', 'store')->name('store');
-});
+})->middleware(['auth', 'verified', 'role:'.Role::User->value]);
 
-Route::post(uri: '/questions/{id}/choices', action: [ChoiceController::class, 'store'])->name('choices.store');
+Route::post(uri: '/questions/{id}/choices', action: [ChoiceController::class, 'store'])->name('choices.store')
+->middleware(['auth', 'verified', 'role:'.Role::User->value]);
 
 
 
 // 管理画面
-Route::get(uri: 'admin/',action:  [ AdminDashboradController::class, 'index'])->name('admin.dashboard');
+Route::get(uri: 'admin/',action:  [ AdminDashboradController::class, 'index'])
+->middleware(['auth', 'verified', 'role:' . Role::Admin->value])
+->name('admin.dashboard');
 
 Route::controller(AdminQuestionController::class)
-->prefix('questions')
-->as('questions.')
+->prefix('admin.questions')
+->as('admin.questions.')
 ->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/{id}', 'show')->name('show');
     Route::post('/', 'store')->name('store');
-});
+})->middleware(['auth', 'verified', 'role:'.Role::Admin->value]);
