@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 # 独自追加
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ChoiceController;
+use App\Http\Controllers\ApiQuestionController;
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboradController;
 use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;
@@ -73,3 +74,8 @@ Route::controller(AdminQuestionController::class)
     Route::get('/{id}', 'show')->name('show');
     Route::post('/', 'store')->name('store');
 })->middleware(['auth', 'verified', 'role:'.Role::Admin->value]);
+
+// API
+Route::apiResource('api/questions', ApiQuestionController::class)
+->only('index')
+->middleware(['auth', 'verified', 'role:'.Role::User->value]);
