@@ -2,6 +2,15 @@
 
 Laravel 11をDocker環境(nginx,php,mysql)で構築し、主要な機能を動かすことを目的としたプロジェクトです。
 
+## 機能概要
+
+このアプリは、質問投稿とそれに対する投票ができるWebアプリです。  
+極小規模ではありますが、様々な技術を幅広く使用しています。  
+- 投稿：同期処理
+- 投票：Vue + 非同期処理
+- DB構成：質問（questions）- 投票（choices）の一対多
+- その他：バッチ処理、テスト、画像アップロードも対応
+
 ## 環境概要
 
 本アプリケーションは、以下の技術スタックおよびDockerを用いた仮想環境で構築されています。
@@ -92,12 +101,34 @@ MYSQL_PORT=3306
 PMA_PORT=8080
 ```
 
-### laravelについて
-- 独習内容等を以下に記載。
+## 独習内容
+
+### 学習済み
+
+- MVC構造、Artisan、Routing、Migration、Seeder
+- テスト（Unit / Feature）
+- Blade、Vite、JS / Vue連携
+- 認証（Breeze / Fortify / Jetstream / Sanctum）
+- バッチ、ミドルウェア、ログ
+- Spatieによる権限管理
+- 管理画面構築（Filament など）
+- Middleware
+
+### 今後の学習内容
+
+- Api関連
+- イベント、リスナー、キュー
+- CI/CDと自動テスト
+- エラーハンドリング関連
+- セキュリティ対策
+
+---
+
+詳細は以下のリンクを参照ください。
 
 [Part0: Docker](docs/part0_docker.md)
 
-[Part1: アプリ概要・Artisan・MVC](docs/part1_app_overview.md)
+[Part1: Laravel・Artisan・MVC](docs/part1_app_overview.md)
 
 [Part2: View / Routing / Migration / Seeder](docs/part2_view_routing_db.md)
 
@@ -111,4 +142,4 @@ PMA_PORT=8080
 
 [ロードマップ](docs/ロードマップ.md)
 
-[原文](docs/laravelについて.md)
+~~[原文](docs/laravelについて.md)~~
