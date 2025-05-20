@@ -20,11 +20,11 @@ npm install \
   postcss \
   autoprefixer
 
-echo "🎨 Tailwind 初期設定"
+echo " Tailwind 初期設定"
 npx tailwindcss init -p
 
 echo "Laravel の初期設定"
 php artisan key:generate
-php artisan migrate
+php artisan migrate:fresh --seed
 
 echo "セットアップ完了"
