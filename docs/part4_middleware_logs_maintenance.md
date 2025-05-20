@@ -1,31 +1,69 @@
-# Part 4: Middleware / ログ / メンテナンス
+# Part 4: ミドルウェア / ログ / メンテナンス他注意点
 
-## ミドルウェア
+## ミドルウェア（Middleware）
 
 ```bash
 php artisan make:middleware AccessLogMiddleware
 ```
 
-- リクエスト前後に処理を挟む仕組み
-- グローバル or ルート単位で適用可能
+- ルートごとに適用：`->middleware('auth')`
+- グローバル適用：`bootstrap/app.php`
 
-## ログ
+### 用途例
+
+- アクセスログ記録
+- 権限チェック
+- リクエスト変換
+
+---
+
+## ログ出力（Logging）
 
 ```php
-Log::info('処理完了');
-Log::channel('slack')->error('例外発生');
+Log::info('成功ログ');
+Log::error('失敗ログ', ['exception' => $e]);
+Log::channel('slack')->alert('致命的エラー');
 ```
 
-- `config/logging.php` でチャネル設定
-- ローテーション、Slack通知、バッチログ分離などに活用
+- `config/logging.php` でチャネル制御
+- `daily`, `single`, `slack`, `stderr` などを用途で切り分け
+
+---
 
 ## メンテナンスモード
 
 ```bash
-php artisan down --secret="some-token"
+php artisan down --secret="secret-token"
+php artisan up
+```
+
+- `?secret=xxx` で特定者だけ確認可能
+
+---
+
+## 本番更新フロー（例）
+
+### DBあり
+
+```bash
+php artisan down --secret="xxx"
 php artisan migrate --force
 php artisan up
 ```
 
-- `--secret` を使うと限定アクセス可
-- 本番の安全な更新時に有用
+### コードのみ
+
+```bash
+git pull origin main
+php artisan optimize:clear
+php artisan config:cache
+php artisan view:cache
+php artisan route:cache
+```
+
+---
+
+## 補足
+
+- ミドルウェアで責務分離
+- ログでデバッグ・障害対応
