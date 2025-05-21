@@ -93,3 +93,24 @@ php artisan route:cache
 
 - ミドルウェアで責務分離
 - ログでデバッグ・障害対応
+
+
+## 他注意点等
+
+設定ファイル変更時は読み直しが必要
+
+- 設定キャッシュのクリア
+
+```bash
+php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan config:cache
+```
+
+```
+php artisan config:clear
+php artisan view:clear
+php artisan route:clear
+```
+- 新しい設定のキャッシュ生成
+```
+php artisan config:cache
+```

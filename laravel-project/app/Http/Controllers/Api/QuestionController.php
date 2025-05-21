@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Question;
 use Illuminate\Http\Request;
 
-class ApiQuestionController extends Controller
+class QuestionController extends Controller
 {
     /**
      * 一覧表示
