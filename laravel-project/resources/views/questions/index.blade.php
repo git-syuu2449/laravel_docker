@@ -28,25 +28,12 @@
         </a>
     </div>
 
-    @if ($questions->isEmpty())
-        <span>
-            投稿はありません。
-        </span>
-    @else
-        <ul class="question_list">
-            @foreach ($questions as $question)
-                <li>
-                    <span>
-                        {{ $question->pub_date }}
-                    </span>
-                    <p>
-                        {{ $question->question_text }}
-                    </p>
-                    <a href="{{ route('questions.show', $question->id) }}">
-                        評価
-                    </a>
-                </li>
-            @endforeach
-        </ul>
-    @endif
+    <div id="app-vue">
+        <question-area
+            :get-url="'{{ route('api.questions.index') }}'"
+            :initial-questions='@json($questions)'
+        ></question-area>
+    </div>
+
+    
 @endsection

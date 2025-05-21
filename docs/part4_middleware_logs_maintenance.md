@@ -30,6 +30,32 @@ Log::channel('slack')->alert('致命的エラー');
 
 ---
 
+## デバッグ
+
+- 処理を止めた上で画面に出力
+`dd($requesr);`
+
+- 処理を止めずに画面に出力
+`dump($requesr);`
+
+- ログ出力例
+`Log::debug('user:', $request->user()?->toArray());`
+
+
+### デバッガー
+デバッガーを使うとログやSqlの確認が可能。  
+導入は以下  
+
+```.env
+APP_DEBUG=true
+```
+
+```bash(docker)
+composer require barryvdh/laravel-debugbar --dev
+```
+
+---
+
 ## メンテナンスモード
 
 ```bash
@@ -67,3 +93,24 @@ php artisan route:cache
 
 - ミドルウェアで責務分離
 - ログでデバッグ・障害対応
+
+
+## 他注意点等
+
+設定ファイル変更時は読み直しが必要
+
+- 設定キャッシュのクリア
+
+```bash
+php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan config:cache
+```
+
+```
+php artisan config:clear
+php artisan view:clear
+php artisan route:clear
+```
+- 新しい設定のキャッシュ生成
+```
+php artisan config:cache
+```

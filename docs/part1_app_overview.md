@@ -47,8 +47,13 @@ public function choices()
 
 ### 🔹 Controller
 
-- 質問に関するCRUD処理は `QuestionController`
-- 非同期用のAPIを `QuestionApiController` として分離
+以下コマンドで作成する。
+
+`php artisan make:controller {$コントローラ名}`
+`php artisan make:controller ApiQuestionController --api --model=Question`
+
+オプション等は以下サイトを参考に
+https://thousand-tech.blog/php/laravel/artisan/cheatsheet/make-controller/
 
 ---
 

@@ -138,6 +138,8 @@ PMA_PORT=8080
 
 [Part5: Vue / JS / Vite連携](docs/part5_vue_js_vite.md)
 
+[Part6: API](docs/part6_api.md)
+
 [開発環境等](docs/開発環境.md)
 
 [ロードマップ](docs/ロードマップ.md)
