@@ -17,7 +17,7 @@ class ApiQuestionController extends Controller
         return response()->json([
             'status' => true,
             'questions' => $questions
-        ], 200);
+        ], 201);
     }
 
 }

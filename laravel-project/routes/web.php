@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 # 独自追加
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ChoiceController;
-use App\Http\Controllers\ApiQuestionController;
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboradController;
 use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;
@@ -48,13 +47,14 @@ Route::middleware('auth')->group(function () {
 Route::controller(QuestionController::class)
 ->prefix('questions')
 ->as('questions.')
+->middleware(['auth', 'verified', 'role:'.Role::User->value])
 ->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/create', 'create')->name('create');
     Route::get('/createA', 'createA')->name('createA');
     Route::get('/{id}', 'show')->name('show');
     Route::post('/', 'store')->name('store');
-})->middleware(['auth', 'verified', 'role:'.Role::User->value]);
+});
 
 Route::post(uri: '/questions/{id}/choices', action: [ChoiceController::class, 'store'])->name('choices.store')
 ->middleware(['auth', 'verified', 'role:'.Role::User->value]);
@@ -69,13 +69,9 @@ Route::get(uri: 'admin/',action:  [ AdminDashboradController::class, 'index'])
 Route::controller(AdminQuestionController::class)
 ->prefix('admin.questions')
 ->as('admin.questions.')
+->middleware(['auth', 'verified', 'role:'.Role::Admin->value])
 ->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/{id}', 'show')->name('show');
     Route::post('/', 'store')->name('store');
-})->middleware(['auth', 'verified', 'role:'.Role::Admin->value]);
-
-// API
-Route::apiResource('api/questions', ApiQuestionController::class)
-->only('index')
-->middleware(['auth', 'verified', 'role:'.Role::User->value]);
+});

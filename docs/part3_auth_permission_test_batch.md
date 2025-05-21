@@ -112,6 +112,42 @@ php artisan test --filter=HogeTest(クラス名) # 特定のテストクラス�
 php artisan test --filter=can_hoge_hoge(メソッド名) # 特定のテストメソッドだけ実行
 ```
 
+### 認証が必要なテストケース
+
+認証後に利用する機能では、未ログイン状態だとテストケースが通らない。  
+Laravel標準のHTTPテストのactingAsメソッドを利用してログイン状態を作る。
+
+### 検証内容
+
+Laravel標準で用意されている検証方法でよく使用されるものを抜粋
+
+- assertStatus
+ステータスコードの検証
+
+- assertSessionHasErrors
+エラーが発生することの検証
+
+- assertDatabaseHas
+DBの値に対しての検証
+
+参考：https://laravel.com/docs/11.x/
+
+### テストデータ  
+
+#### Factory
+
+他seeder項等にも関連するが、テストデータを作成する際に*Factory*を使用する。  
+
+- 作成方法は以下  
+`php artisan make:factory [ファクトリ名] --model=[対象のモデル名]`
+
+- 利用方法例は以下
+`Question::factory()->create();`
+
+##### 補足
+
+fackerを利用するとそれっぽいデータが作られる。
+
 ---
 
 ## バッチ処理（Artisan Command + スケジューラ）

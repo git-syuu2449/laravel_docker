@@ -30,6 +30,32 @@ Log::channel('slack')->alert('致命的エラー');
 
 ---
 
+## デバッグ
+
+- 処理を止めた上で画面に出力
+`dd($requesr);`
+
+- 処理を止めずに画面に出力
+`dump($requesr);`
+
+- ログ出力例
+`Log::debug('user:', $request->user()?->toArray());`
+
+
+### デバッガー
+デバッガーを使うとログやSqlの確認が可能。  
+導入は以下  
+
+```.env
+APP_DEBUG=true
+```
+
+```bash(docker)
+composer require barryvdh/laravel-debugbar --dev
+```
+
+---
+
 ## メンテナンスモード
 
 ```bash

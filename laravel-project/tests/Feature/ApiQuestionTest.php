@@ -7,7 +7,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+use App\Models\User;
 use App\Models\Question;
+use App\Enums\Role;
 
 class ApiQuestionTest extends TestCase
 {
@@ -17,20 +19,70 @@ class ApiQuestionTest extends TestCase
     use WithFaker;
     
      /**
-      * 一覧取得可能なケース
+      * 一覧取得可能かつデータが存在するケース
       * @return void
       */
     #[Test]
-    public function can_api_question_index()
+    public function exist_api_question_index()
     {
+        // 必要データの作成
+        $user = User::factory()->create();
         $question = Question::factory()->create();
-        $target_url = route('api/questions.index');
 
-        $response = $this->get($target_url);
+        $target_url = route('api.questions.index');
 
-        // リダイレクト確認
-        $response->assertRedirect(route('questions.index'));
+        $response = $this
+            // ログイン状態にする
+            ->actingAs($user)
+            ->getJson($target_url);
+
         // ステータスコード確認
         $response->assertStatus(201);
     }
+
+    /**
+      * 一覧取得可能かつデータが存在しないケース
+      * @return void
+      */
+      #[Test]
+      public function not_exist_api_question_index()
+      {
+          // 必要データの作成
+          $user = User::factory()->create();
+          $question = Question::factory()->create();
+  
+          $target_url = route('api.questions.index');
+  
+          $response = $this
+              // ログイン状態にする
+              ->actingAs($user)
+              ->getJson($target_url);
+  
+          // ステータスコード確認
+          $response->assertStatus(201);
+      }
+
+    /**
+      * 一覧取得不可能なケース
+      * @return void
+      */
+      #[Test]
+      public function impossible_api_question_index()
+      {
+          // 必要データの作成
+          $user = User::factory()->create([
+            'role' => Role::Guest // 権限のないユーザー
+          ]);
+          $question = Question::factory()->create();
+  
+          $target_url = route('api.questions.index');
+  
+          $response = $this
+              // ログイン状態にする
+              ->actingAs($user)
+              ->getJson($target_url);
+  
+          // ステータスコード確認
+          $response->assertStatus(403);
+      }
 }
