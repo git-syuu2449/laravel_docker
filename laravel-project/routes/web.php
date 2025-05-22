@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 # 独自追加
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ChoiceController;
+use App\Http\Controllers\ErrorDebugController;
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboradController;
 use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;
@@ -75,3 +76,17 @@ Route::controller(AdminQuestionController::class)
     Route::get('/{id}', 'show')->name('show');
     Route::post('/', 'store')->name('store');
 });
+
+// エラーハンドリングの検証(debug時)
+if (config('app.debug')) {
+    Route::get('/debug-error_500', function () {
+        abort(500, 'テスト用の500エラー');
+    });
+    Route::controller(ErrorDebugController::class)
+    ->prefix('debug-error')
+    ->as('debug-error')
+    ->group(function () {
+        Route::get('500', 'exeption_500')->name('500');
+        Route::get('abort_500', 'exeption_abort_500')->name('abort_500');
+    });
+}

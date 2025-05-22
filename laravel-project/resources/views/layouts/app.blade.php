@@ -19,7 +19,10 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
+
+            @if(Auth::user())
             @include('layouts.navigation')
+            @endif
 
             <!-- Page Heading -->
             @isset($header)
