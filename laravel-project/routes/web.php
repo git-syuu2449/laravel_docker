@@ -15,6 +15,9 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 // ログイン関連
 require __DIR__.'/auth.php';
 
+// 開発関連
+require __DIR__.'/dev.php';
+
 Route::get('/', function () {
     return view('welcome');
 });

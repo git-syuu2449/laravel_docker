@@ -4,9 +4,15 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
+use Illuminate\Http\Request;
+
 // Middleware
 use App\Http\Middleware\AccessLogMiddleware;
 use App\Http\Middleware\RoleMiddleware;
+
+// Exception
+use App\Exceptions\CustomExceptionHandler;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -25,5 +31,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
+    })
+    // 
+    ->withProviders([  
+    ])
+    ->create();
