@@ -36,12 +36,3 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withProviders([  
     ])
     ->create();
-
-// カスタムハンドラ登録
-// providerに委譲するが、以下のように登録もできる。
-// $app->singleton(
-//     Illuminate\Contracts\Debug\ExceptionHandler::class,
-//     CustomExceptionHandler::class
-// );
-
-// return $app;

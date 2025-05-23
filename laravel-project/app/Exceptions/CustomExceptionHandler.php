@@ -21,7 +21,7 @@ class CustomExceptionHandler extends ExceptionHandler
     ];
 
     /**
-     * 検証用に上書き.終了後コメントアウト
+     * 検証用に上書き
      * @param mixed $request
      * @param \Throwable $e
      * @return mixed|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
@@ -35,8 +35,6 @@ class CustomExceptionHandler extends ExceptionHandler
         }
 
         \Log::debug('Non-HttpException caught in render()');
-
-        // dd($e); // debug
 
         return parent::render($request, $e);
     }
