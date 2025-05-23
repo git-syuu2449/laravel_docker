@@ -134,6 +134,13 @@ return [
             'level' => 'info',
         ],
 
+        // 500等のクリティカルなエラーログ
+        'critical_errors' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/critical.log'),
+            'level' => 'error',
+        ],
+
     ],
 
 ];
