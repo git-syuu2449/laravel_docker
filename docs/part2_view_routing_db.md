@@ -2,7 +2,7 @@
 
 ## View（Bladeテンプレート）
 
-Laravelでは、View層は `resources/views` ディレクトリに配置され、Bladeテンプレートエンジンが使用されます。
+Laravelでは、View層は `resources/views` ディレクトリに配置され、Bladeテンプレートエンジンが使用される。  
 
 ### View構造と共通化方針
 
