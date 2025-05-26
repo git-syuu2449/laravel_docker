@@ -30,6 +30,11 @@ class Question extends Model
         return $this->hasMany(Choice::class);
     }
 
+    public function questionImages()
+    {
+        return $this->hasMany(QuestionImage::class);
+    }
+
     /**
      * Summary of scopeWithChoices
      * select * from `choices` where `choices`.`question_id` in (1, ...) and `choices`.`deleted_at` is null
