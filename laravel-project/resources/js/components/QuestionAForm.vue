@@ -1,53 +1,51 @@
 <template>
-  <form @submit.prevent="submitForm" class="shadow-md rounded-md bg-white w-full max-w-2xl p-10">
-    <div class="flex sm:items-center mb-6 flex-col sm:flex-row">
-      <label for="question_text" class="block sm:w-1/3 font-bold sm:text-right mb-1 pr-4"><span class="text-red-600"> * </span>質問内容</label>
-      <input 
-          type="text" 
-          v-model="form.question_text" 
-          id="question_text" 
-          class="block w-full sm:w-2/3 bg-gray-200 py-2 px-3 text-gray-700 border border-gray-200 rounded focus:outline-none focus:bg-white" />
-      <p v-if="errors.question_text" class="text-red-500">{{ errors.question_text[0] }}</p>
-    </div>
-
-    <div class="flex justify-center">
-      <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded fucus:outline-none focus:shadow-outline mt-3">登録</button>
-    </div>
+  <form @submit.prevent="submitForm" class="shadow-md rounded-md bg-white w-full max-w-2xl p-10" enctype="multipart/form-data">
+    <QuestionFormBody
+      ref="formBodyRef"
+      :errors="errors"
+      :old="old"
+    />
     <p v-if="success" class="text-green-600 mt-2">登録が完了しました</p>
+    <div class="flex justify-center">
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">登録</button>
+    </div>
   </form>
 </template>
 
-<!-- Vue2向けの書き方 -->
-<script>
+<script setup>
+import { ref } from 'vue'
 import axios from 'axios'
+import QuestionFormBody from './QuestionForm.vue'
 
-export default {
-  name: 'QuestionForm',
-  props: ['postUrl'],
-  data() {
-    return {
-      form: {
-        question_text: '',
-      },
-      errors: {},
-      success: false,
-    }
-  },
-  methods: {
-    async submitForm() {
-      this.errors = {}
-      this.success = false
-      try {
-        await axios.post(this.postUrl, this.form)
-        this.success = true
-        this.form.question_text = ''
-      } catch (error) {
-        if (error.response?.status === 422) {
-          this.errors = error.response.data.errors
-        } else {
-          console.error(error)
-        }
-      }
+const props = defineProps({ postUrl: String })
+
+const formBodyRef = ref(null)
+const errors = ref({})
+const old = ref({})
+const success = ref(false)
+
+const submitForm = async () => {
+  errors.value = {}
+  success.value = false
+
+  const form = new FormData()
+  // 子の値をセット
+  const formData = formBodyRef.value.getFormData()
+
+  form.append('question_text', formData.question_text)
+  for (let i = 0; i < formData.images.length; i++) {
+    form.append('images[]', formData.images[i])
+  }
+
+  try {
+    await axios.post(props.postUrl, form)
+    success.value = true
+  } catch (error) {
+    if (error.response?.status === 422) {
+      //　エラーを注入
+      errors.value = error.response.data.errors
+    } else {
+      console.error(error)
     }
   }
 }

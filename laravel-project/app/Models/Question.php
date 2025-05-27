@@ -19,7 +19,7 @@ class Question extends Model
      * 入力可能なカラム
      * @var array
      */
-    protected $fillable = ['question_text', 'pub_date'];
+    protected $fillable = ['user_id', 'question_text', 'pub_date'];
 
     /**
      * Summary of choices
@@ -30,6 +30,11 @@ class Question extends Model
         return $this->hasMany(Choice::class);
     }
 
+    public function questionImages()
+    {
+        return $this->hasMany(QuestionImage::class);
+    }
+
     /**
      * Summary of scopeWithChoices
      * select * from `choices` where `choices`.`question_id` in (1, ...) and `choices`.`deleted_at` is null
@@ -38,6 +43,15 @@ class Question extends Model
     public function scopeWithChoices($query)
     {
         return $query->with('choices');
+    }
+
+    /**
+     * Summary of scopeWithQuestionImages
+     * @param mixed $query
+     */
+    public function scopeWithQuestionImages($query)
+    {
+        return $query->with('questionImages');
     }
 
     public function scopeId($query, $id)

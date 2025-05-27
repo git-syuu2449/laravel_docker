@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreQuestionRequest;
+
+use App\Services\QuestionService;
 
 class QuestionController extends Controller
 {
@@ -38,26 +41,30 @@ class QuestionController extends Controller
      */
     public function store(StoreQuestionRequest $request)
     {
-        Log::debug($request); // debug
         // バリデーション処理
         $validated = $request->validated();
 
         // バリデーション通過後の処理
-        Log::debug($validated); // debug
-        // dd($request->all()); // debug
-        // 登録処理
-        // Question::create($validated);
-        // 個別に登録処理
-        Question::create([
-            'question_text' => $validated['question_text'],
-            'pub_date' => now()
-        ]);
 
-        // return response()->json(['message' => '登録完了'], 201);
+        // 登録に使用するログインユーザー
+        $user = Auth::user();
 
-        // 一覧画面に遷移
-        return redirect()->route('questions.index')
-            ->with('status', '質問登録に成功しました');
+        try {
+
+            // 質問テーブルと質問画像テーブルへの登録
+            // serive層に委譲
+            $service = new QuestionService();
+            $service->createWithImages($request, $user); // バリデーション後に整形等している場合は$request->validated()を渡す
+
+            // 一覧画面に遷移
+            return redirect()->route('questions.index')
+                ->with('status', '質問登録に成功しました');
+
+        } catch (\Throwable $e) {
+            report($e);
+
+            return response()->json(['message' => '登録に失敗しました'], 500);
+        }
     }
 
     /**
@@ -65,10 +72,7 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-        // $question = Question::findOrFail($id)->choices;
-        // $question = Question::getLeftQuestionWithChoices($id);
-        $question = Question::WithChoices()->id($id)->first();
-        // dump($question->toArray()); //debug
+        $question = Question::with(['choices', 'questionImages'])->findOrFail($id);
         return view(view: 'questions.show',data: compact('question'));
     }
 

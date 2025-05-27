@@ -13,10 +13,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            // 一対多
-            QuestionSeeder::class,
             // ユーザー
             UserSeeder::class,
+            // 一対多の質問＋選択＋画像
+            QuestionSeeder::class,
         ]);
     }
 

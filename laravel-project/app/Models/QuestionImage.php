@@ -6,12 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-/**
- * Summary of Choice
- */
-class Choice extends Model
+class QuestionImage extends Model
 {
-    /** @use HasFactory<\Database\Factories\Models\ChoiceFactory> */
+    /** @use HasFactory<\Database\Factories\QuestionImageFactory> */
     use HasFactory;
     use SoftDeletes;
 
@@ -19,11 +16,14 @@ class Choice extends Model
      * 入力可能なカラム
      * @var array
      */
-    protected $fillable = ['question_id', 'user_id', 'choice_text', 'votes'];
+    protected $fillable = ['question_id', 'user_id', 'image'];
 
+    /**
+     * 質問テーブルリレーション
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Question, QuestionImage>
+     */
     public function question()
     {
         return $this->belongsTo(Question::class);
     }
-
 }

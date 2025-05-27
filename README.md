@@ -140,7 +140,9 @@ PMA_PORT=8080
 
 [Part6: API](docs/part6_api.md)
 
-[Part7: API](docs/part7_exeption.md)
+[Part7: 例外処理、プロバイダ](docs/part7_exeption.md)
+
+[PartX: その他](docs/part_x_other.md)
 
 [開発環境等](docs/開発環境.md)
 

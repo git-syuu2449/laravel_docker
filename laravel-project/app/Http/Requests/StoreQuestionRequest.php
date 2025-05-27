@@ -16,6 +16,16 @@ class StoreQuestionRequest extends BaseFormRequest
     }
 
     /**
+     * 後続のチェックを行うか
+     * rulesでbailを指定すると有効となる
+     * @return bool
+     */
+    protected function validateBail()
+    {
+        return true;
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -24,7 +34,8 @@ class StoreQuestionRequest extends BaseFormRequest
     {
         return [
             'question_text' => ['required', 'string', 'max:255', 'min:10'],
-            // 'body'  => ['required', 'string', 'max:255'],
+            'images' => ['required', 'array'],
+            'images.*' => ['bail', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
         ];
     }
 
@@ -36,6 +47,7 @@ class StoreQuestionRequest extends BaseFormRequest
     {
         // 入力データ取得
         $question_text = $this->input('question_text');
+        $images = $this->file('images');
     }
 
     /**
@@ -65,12 +77,9 @@ class StoreQuestionRequest extends BaseFormRequest
      */
     public function messages()
     {
+        // validation.phpを参照するようにした。lang/*/validation.phpに記載がある場合は個別の設定は不要
         return [
-            'question_text.required',
-            'question_text.max',
-            'question_text.min'
         ];
-        // validation.phpを参照するようにした
         /*
         return [
             // question_text
@@ -89,6 +98,8 @@ class StoreQuestionRequest extends BaseFormRequest
     {
         return [
             'question_text' => '質問内容',
+            'images' => '画像',
+            'images.*' => '画像',
         ];
     }
 }

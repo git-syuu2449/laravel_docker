@@ -52,7 +52,7 @@ const vote = async (id) => {
 
 ### 特徴
 
-- Laravel 11 では Vite がデフォルトで採用されており、高速ビルドとHMRに対応
+- Laravel 11 では Vite(ヴィット) がデフォルトで採用されており、高速ビルドとHMRに対応
 - Vue・Tailwindとの連携も容易
 
 ### vite.config.js（抜粋）

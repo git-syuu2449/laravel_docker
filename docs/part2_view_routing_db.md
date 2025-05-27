@@ -2,7 +2,7 @@
 
 ## View（Bladeテンプレート）
 
-Laravelでは、View層は `resources/views` ディレクトリに配置され、Bladeテンプレートエンジンが使用されます。
+Laravelでは、View層は `resources/views` ディレクトリに配置され、Bladeテンプレートエンジンが使用される。  
 
 ### View構造と共通化方針
 
@@ -63,10 +63,11 @@ Route::post('/questions', [QuestionController::class, 'store']);
 
 ## Migration（マイグレーション）
 
-マイグレーションはDBテーブル構造をコードで管理できる仕組みです。
+マイグレーションはDBテーブル構造をコードで管理できる仕組み。
 
 ```bash
-php artisan make:migration create_questions_table
+php artisan make:migration create_questions_table --create=テーブル名
+php artisan make:migration add_questions_table --table=テーブル名
 php artisan migrate
 ```
 

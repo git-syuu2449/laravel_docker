@@ -75,6 +75,12 @@ php artisan cache:clear
 php artisan view:clear
 ```
 
+### スタブについて
+
+makeコマンドで作成する際に、スタブを基に作成を行う。  
+以下コマンドにてstubs/以下にスタブが作成される。  
+`php artisan stub:publish`
+
 
 ## パッケージ
 
