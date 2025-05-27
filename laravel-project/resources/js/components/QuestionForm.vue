@@ -1,69 +1,69 @@
 <template>
+  <div class="mb-4">
+    <label for="question_text"><span class="text-red-600">*</span> 質問内容</label>
+    <input
+      type="text"
+      id="question_text"
+      name="question_text"
+      v-model="form.question_text"
+      class="border w-full"
+    />
+    <p v-if="errors.question_text" class="text-red-500 text-sm">{{ errors.question_text[0] }}</p>
+  </div>
 
-    <div class="mb-4">
-      <label for="title"><span class="text-red-600"> * </span>質問内容</label>
-      <input
-        type="text"
-        name="question_text"
-        id="question_text"
-        :value="form.question_text"
-        @input="$emit('update:question_text', $event.target.value)"
-        class="border w-full"
-      />
-      <p v-if="errors.question_text" class="text-red-500 text-sm">{{ errors.question_text[0] }}</p>
+  <div class="mb-4">
+    <label for="images">画像</label>
+    <input
+      type="file"
+      id="images"
+      name="images[]"
+      multiple
+      @change="handleFiles"
+      class="border w-full"
+    />
+    <p v-if="errors.images" class="text-red-500 text-sm">{{ errors.images[0] }}</p>
+    <div v-if="hasImageErrors">
+      <ul>
+        <li v-for="(message, index) in imageErrorMessages" :key="index" class="text-red-500">
+          {{ message }}
+        </li>
+      </ul>
     </div>
-    <div class="mb-4">
-      <label for="title">画像</label>
-      <input
-        type="file"
-        multiple
-        name="images[]"
-        id="images"
-        :value="form.images"
-        class="border w-full"
-      />
-      <p v-if="errors.images" class="text-red-500 text-sm">{{ errors.images[0] }}</p>
-      <!-- multipleを使用するとimages.0のような形でエラーメッセージを受け取れるが、v-if等で判定ができないため判定処理を独自に入れる -->
-      <div v-if="hasImageErrors">
-        <ul>
-          <li v-for="(message, index) in imageErrorMessages" :key="index" class="text-red-500">
-            {{ message }}
-          </li>
-        </ul>
-      </div>
-    </div>
-
+  </div>
 </template>
-  
-<script>
-  export default {
-    name: 'QuestionForm',
-    props: {
-      errors: Object,
-      old: Object,
-      formData: Object,
-    },
-    data() {
-      return {
-        form: {
-            question_text: this.old.question_text || '',
-            images: this.old.images || '',
-        },
-        // csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-      }
-    },
-    emits: ['update:question_text'],
-    computed: {
-      // イメージでのエラーが起きているか
-      hasImageErrors() {
-        return Object.keys(this.errors).some(key => key.startsWith('images.'));
-      },
-      // イメージのエラーメッセージをフィルタ
-      imageErrorMessages() {
-        return Object.entries(this.errors)
-          .filter(([key]) => key.startsWith('images.'))
-          .flatMap(([, messages]) => messages);
-      }
-    }
-  }
+
+<script setup>
+import { reactive, computed } from 'vue'
+
+const props = defineProps({
+  errors: Object,
+  old: Object,
+})
+
+// ローカル状態
+const form = reactive({
+  question_text: props.old.question_text || '',
+  images: [],
+})
+
+// 親に公開するメソッド
+const getFormData = () => form
+defineExpose({ getFormData })
+
+// ファイル変更をトリガーに手動でセット（multipart/form-data対応 ）
+const handleFiles = (event) => {
+  form.images = Array.from(event.target.files)
+}
+
+// バリデーションエラー処理
+const hasImageErrors = computed(() =>
+  Object.keys(props.errors || {}).some(key => key.startsWith('images.'))
+)
+
+// イメージのエラーを展開
+const imageErrorMessages = computed(() =>
+  Object.entries(props.errors || {})
+    .filter(([key]) => key.startsWith('images.'))
+    .flatMap(([, messages]) => messages)
+)
 </script>

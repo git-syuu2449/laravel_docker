@@ -40,7 +40,7 @@ class QuestionSeeder extends Seeder
                 if ($question->id % 2 == 0) return;
                 // 回答
                 Choice::factory()
-                    ->count(3)
+                    ->count(rand(1, 3))
                     ->create([
                         'question_id' => $question->id,
                         'user_id' => 2,
@@ -53,7 +53,7 @@ class QuestionSeeder extends Seeder
                 if ($question->id % 3 == 0) return;
 
                 QuestionImage::factory()
-                // ->count()
+                ->count(rand(1, 3))
                 ->create([
                     'question_id' => $question->id,
                     'user_id' => 2,

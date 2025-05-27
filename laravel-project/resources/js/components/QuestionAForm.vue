@@ -1,80 +1,51 @@
 <template>
   <form @submit.prevent="submitForm" class="shadow-md rounded-md bg-white w-full max-w-2xl p-10" enctype="multipart/form-data">
-    <!-- :はv-bindの省略 -->
-     <questionFormBody 
+    <QuestionFormBody
+      ref="formBodyRef"
       :errors="errors"
       :old="old"
-      v-model="formData"
-     />
+    />
     <p v-if="success" class="text-green-600 mt-2">登録が完了しました</p>
     <div class="flex justify-center">
-      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded fucus:outline-none focus:shadow-outline mt-3">登録</button>
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">登録</button>
     </div>
   </form>
 </template>
 
-<!-- Vue2向けの書き方 -->
-<script>
+<script setup>
+import { ref } from 'vue'
 import axios from 'axios'
-import { ref, reactive } from 'vue'
-
 import QuestionFormBody from './QuestionForm.vue'
 
-axios.defaults.withCredentials = true
-axios.defaults.xsrfCookieName = 'XSRF-TOKEN'
-axios.defaults.xsrfHeaderName = 'X-XSRF-TOKEN'
+const props = defineProps({ postUrl: String })
 
-const errors = ref([]);
-const old = ref([]);
-// v-modelで双方向にバインディングする
-const formData = reactive({
-  question_text: '',
-  images: []
-})
+const formBodyRef = ref(null)
+const errors = ref({})
+const old = ref({})
+const success = ref(false)
 
-export default {
-  // vue2だとimportだけだと使えず、明示的に読み込みの記載が必要
-  components: {
-    QuestionFormBody,
-  },
-  name: 'QuestionForm',
-  // 親から受け取る
-  props: {
-    postUrl: String, 
-  },
-  // 子に渡す
-  data() {
-    return {
-      errors: {},
-      old: {},
-      // form: {
-      //   question_text: '',
-      //   images: [],
-      // },
-      success: false,
-    }
-  },
-  methods: {
-    async submitForm() {
-      this.errors = {}
-      this.success = false
-      console.log('===================')
-      console.log(formData);
-      try {
-        await axios.post(this.postUrl, formData)
-        this.success = true
-        // this.form.question_text = ''
-        // this.form.images = []
-      } catch (error) {
-        if (error.response?.status === 422) {
-          this.errors = error.response.data.errors
-          // エラーの再注入
-          console.log(error.response.data.errors)
-          errors.value = error.response.data.errors
-        } else {
-          console.error(error)
-        }
-      }
+const submitForm = async () => {
+  errors.value = {}
+  success.value = false
+
+  const form = new FormData()
+  // 子の値をセット
+  const formData = formBodyRef.value.getFormData()
+
+  form.append('question_text', formData.question_text)
+  for (let i = 0; i < formData.images.length; i++) {
+    form.append('images[]', formData.images[i])
+  }
+
+  try {
+    await axios.post(props.postUrl, form)
+    success.value = true
+  } catch (error) {
+    if (error.response?.status === 422) {
+      //　エラーを注入
+      errors.value = error.response.data.errors
+    } else {
+      console.error(error)
     }
   }
 }

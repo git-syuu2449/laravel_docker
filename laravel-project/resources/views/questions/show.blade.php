@@ -26,6 +26,14 @@
             {{ $question->question_text }}
         </h3>
 
+        <div>
+            @if (!$question->questionImages->isEmpty())
+                @foreach ($question->questionImages as $image)
+                    <img src="{{ Storage::url($image->image) }}">
+                @endforeach
+            @endif
+        </div>
+
 
         <div id="app-vue">
             <choice-modal-wrapper

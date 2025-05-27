@@ -19,7 +19,7 @@ class Choice extends Model
      * 入力可能なカラム
      * @var array
      */
-    protected $fillable = ['question_id', 'choice_text', 'votes'];
+    protected $fillable = ['question_id', 'user_id', 'choice_text', 'votes'];
 
     public function question()
     {

@@ -13,13 +13,12 @@
     <section class="'text-gray-600 w-full flex flex-col items-center px-2">
         <h2 class="text-3xl font-bold mt-10">質問登録</h2>
 
-        <form method="POST" action="{{ route('questions.store') }}">
+        <form method="POST" action="{{ route('questions.store') }} " enctype="multipart/form-data">
             @csrf
             <div id="app-vue">
                 <question-form
                     :errors='@json($errors->toArray())'
                     :old='@json(old())'
-                    :post-url="'{{ route('questions.store') }}'"
                 ></question-form>
             </div>
             <button type="submit" class="btn btn-primary">登録</button>

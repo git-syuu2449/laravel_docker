@@ -16,7 +16,7 @@ class QuestionImage extends Model
      * 入力可能なカラム
      * @var array
      */
-    protected $fillable = ['image'];
+    protected $fillable = ['question_id', 'user_id', 'image'];
 
     /**
      * 質問テーブルリレーション
