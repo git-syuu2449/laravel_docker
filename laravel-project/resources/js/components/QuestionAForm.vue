@@ -1,35 +1,56 @@
 <template>
-  <form @submit.prevent="submitForm" class="shadow-md rounded-md bg-white w-full max-w-2xl p-10">
-    <div class="flex sm:items-center mb-6 flex-col sm:flex-row">
-      <label for="question_text" class="block sm:w-1/3 font-bold sm:text-right mb-1 pr-4"><span class="text-red-600"> * </span>質問内容</label>
-      <input 
-          type="text" 
-          v-model="form.question_text" 
-          id="question_text" 
-          class="block w-full sm:w-2/3 bg-gray-200 py-2 px-3 text-gray-700 border border-gray-200 rounded focus:outline-none focus:bg-white" />
-      <p v-if="errors.question_text" class="text-red-500">{{ errors.question_text[0] }}</p>
-    </div>
-
-    <div class="flex justify-center">
-      <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded fucus:outline-none focus:shadow-outline mt-3">登録</button>
-    </div>
+  <form @submit.prevent="submitForm" class="shadow-md rounded-md bg-white w-full max-w-2xl p-10" enctype="multipart/form-data">
+    <!-- :はv-bindの省略 -->
+     <questionFormBody 
+      :errors="errors"
+      :old="old"
+      v-model="formData"
+     />
     <p v-if="success" class="text-green-600 mt-2">登録が完了しました</p>
+    <div class="flex justify-center">
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded fucus:outline-none focus:shadow-outline mt-3">登録</button>
+    </div>
   </form>
 </template>
 
 <!-- Vue2向けの書き方 -->
 <script>
 import axios from 'axios'
+import { ref, reactive } from 'vue'
+
+import QuestionFormBody from './QuestionForm.vue'
+
+axios.defaults.withCredentials = true
+axios.defaults.xsrfCookieName = 'XSRF-TOKEN'
+axios.defaults.xsrfHeaderName = 'X-XSRF-TOKEN'
+
+const errors = ref([]);
+const old = ref([]);
+// v-modelで双方向にバインディングする
+const formData = reactive({
+  question_text: '',
+  images: []
+})
 
 export default {
+  // vue2だとimportだけだと使えず、明示的に読み込みの記載が必要
+  components: {
+    QuestionFormBody,
+  },
   name: 'QuestionForm',
-  props: ['postUrl'],
+  // 親から受け取る
+  props: {
+    postUrl: String, 
+  },
+  // 子に渡す
   data() {
     return {
-      form: {
-        question_text: '',
-      },
       errors: {},
+      old: {},
+      // form: {
+      //   question_text: '',
+      //   images: [],
+      // },
       success: false,
     }
   },
@@ -37,13 +58,19 @@ export default {
     async submitForm() {
       this.errors = {}
       this.success = false
+      console.log('===================')
+      console.log(formData);
       try {
-        await axios.post(this.postUrl, this.form)
+        await axios.post(this.postUrl, formData)
         this.success = true
-        this.form.question_text = ''
+        // this.form.question_text = ''
+        // this.form.images = []
       } catch (error) {
         if (error.response?.status === 422) {
           this.errors = error.response.data.errors
+          // エラーの再注入
+          console.log(error.response.data.errors)
+          errors.value = error.response.data.errors
         } else {
           console.error(error)
         }
