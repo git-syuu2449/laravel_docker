@@ -21,12 +21,53 @@ LaravelはMVCモデルを採用している。
 - **View**：Bladeテンプレート / コンポーネントベース
 - **Controller**：HTTPリクエストの処理・ModelとViewの仲介
 
-実際にはルーターの概念が入る。  
+実際にはルーター(routes)の概念が入る。  
 また、責務の分担としてservice等の概念も入ることが多い。  
-柔軟性は高いものの、責務を正しく分けないとファットになるので注意が必要。  
-本システムでは以下の構造  
+柔軟性は高いものの、MVCの責務を正しく分けないとファットになるので注意が必要。  
+
+Webを表示する場合の基本的な処理フローは以下の通り。
+
+1. ユーザーが特定のURLにアクセス
+2. **`routes/web.php`** に定義されたルーティングで、該当するControllerやクロージャが呼び出される
+3. ルーティングの設定に従い、対応する **Controller** のメソッドへ処理を移譲
+4. Controller内で、必要に応じて **ModelやService** を介してデータベースやビジネスロジックにアクセス
+5. Controllerで取得したデータを **View（Bladeテンプレート）** に渡す
+6. ViewでHTMLを生成し、ユーザーにレスポンスを返す
+
+> ※厳密には、ルーティング処理以前に **bootstrap/app.phpで定義された・ServiceProvider・Middleware** 等の処理が走るが、ここでは省略（後述）。
+
 
 ### 🔹 Model（Eloquent ORM）
+
+以下コマンドで作成する。
+
+```bash
+php artisan make:model {$モデル名} -オプション名
+```
+
+オプションは以下が使用可能
+
+<details>
+
+```bash
+
+-m	migration（マイグレーション）を作成
+-f	factory を作成
+-s	seeder を作成
+-c	controller を作成
+-r	controller をリソースタイプで作成
+-a	上記すべてを作成（all）
+
+```
+
+</details>
+
+基本的には-m -f -sオプションをつけてつくる。  
+マイグレーション、シーダー、ファクトリに関しては別紙で記載するため省略。
+
+あくまでスケルトンが作られるだけなのでリレーション含め手動で記載する必要がある。  
+Laravel公式ではないが、Laravel Blueprint というDSLベースのツールを使うと、モデル、マイグレーション、ファクトリ、リレーションまで自動生成できる。  
+
 
 - `Question`, `Choice` モデルを定義
 - `Question hasMany Choice`、`Choice belongsTo Question` の関係を定義
@@ -42,8 +83,11 @@ public function choices()
 
 ### 🔹 View（Blade / Vue）
 
-- 質問一覧や投稿画面は Blade で構成
-- 投票処理部分のみ Vue コンポーネントを使って非同期処理に対応
+resouce以下に作成する。  
+コマンドでのスケルトンの作成は行えないため、手動で作成をする。  
+標準で `blade` というテンプレートエンジンを使用できる。
+
+詳細は[別紙](docs/part2_view_routing_db.md) を参照
 
 ### 🔹 Controller
 
@@ -52,8 +96,7 @@ public function choices()
 `php artisan make:controller {$コントローラ名}`
 `php artisan make:controller ApiQuestionController --api --model=Question`
 
-オプション等は以下サイトを参考に
-https://thousand-tech.blog/php/laravel/artisan/cheatsheet/make-controller/
+オプション等数が多い為[解説サイト](https://thousand-tech.blog/php/laravel/artisan/cheatsheet/make-controller/)を参考にする
 
 ---
 
@@ -65,6 +108,8 @@ Laravelが独自に用意しているコマンドラインインターフェイ�
 
 ### よく使うコマンド例
 
+<details>
+
 ```bash
 php artisan list                         # 全コマンド一覧
 php artisan make:controller HogeController
@@ -74,6 +119,9 @@ php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
 ```
+
+</details>
+
 
 ### スタブについて
 

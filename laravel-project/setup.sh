@@ -2,8 +2,9 @@
 
 set -e
 
+# .envの作成はinit.shで実施
 echo " .env の作成-存在があればスルー"
-cp -n .env.template .env
+cp -n _env.template .env
 
 echo "Composer install 開始"
 composer install

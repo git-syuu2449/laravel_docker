@@ -1,6 +1,7 @@
 # laravel_docker
 
-Laravel 11をDocker環境(nginx,php,mysql)で構築し、主要な機能を動かすことを目的としたプロジェクトです。
+Laravel 11をDocker環境(nginx,php,mysql)で構築し、主要な機能を動かすことを目的としたプロジェクトです。  
+使用している技術等はページ下部<font color="Green">独習内容</font>を参照ください。
 
 ## 機能概要
 
@@ -17,6 +18,12 @@ Laravel 11をDocker環境(nginx,php,mysql)で構築し、主要な機能を動�
 
 ### アプリケーション構成
 
+確認をする場合は表示を押下してください。
+
+<details>
+
+<summary><font color="Red">構成を表示</font></summary>
+
 | 項目        | バージョン例        | 説明 |
 |-------------|---------------------|------|
 | Laravel     | 11.x                | PHPフレームワーク |
@@ -29,7 +36,15 @@ Laravel 11をDocker環境(nginx,php,mysql)で構築し、主要な機能を動�
 | Docker      | 28.1.1              | コンテナ実行環境 |
 | Docker Compose | 2.34             | コンテナオーケストレーション |
 
+</details>
+
 ### ディレクトリ構成（抜粋）
+
+確認をする場合は表示を押下してください。
+
+<details>
+
+<summary><font color="Red">構成を表示</font></summary>
 
 .  
 ├── laravel_docker/  
@@ -53,8 +68,16 @@ Laravel 11をDocker環境(nginx,php,mysql)で構築し、主要な機能を動�
 ├── ├── package-lock.json       # Node.jsの依存関係のロックファイル  
 └── └── README.md               # プロジェクトの説明ファイル  
 
+</details>
 
 ## 環境構築について(初回起動時)
+
+確認をする場合は表示を押下してください。
+
+<details>
+
+<summary><font color="Red">実行手順を表示</font></summary>
+
 
 ### git clone
 
@@ -62,25 +85,54 @@ gitの利用が可能な状態を前提
 
 `mkdir work && cd work`  
 `git clone git@github.com:git-syuu2449/laravel_docker.git`  
-`UID=1000 GID=1000 docker compose --env-file .env up -d --build`  
-`docker compose exec app bash`  
 
-コンテナ内
+### コンテナの起動
+
+#### 事前準備
+
+設定の共通化をdockerとlaravel側でしている為、.envの配置を行う必要がある。  
+*.envの配置については.envの設定項を参照*  
+配置後、以下コマンドをコンソールにて実行する。  
+
+
+```bash
+cd laravel_docker
+`./init.sh`
+```
+
+boxの立ち上げを行う
+
+```bash
+UID=1000 GID=1000 docker compose --env-file .env up -d --build
+docker compose exec app bash
+```
+
+以下はコンテナ内で実施する内容
+
 `cd /var/www/laravel-project`  
 `./setup.sh`  
 setup.sh内でcomposerの実行、migrateを実行する。  
-*.envにて独自の変更点がある場合は.envの設定項を参照*
 
-`npm dev run`  
-viteの起動  
-css,js等をpublicに配置していない為必要
+`npm run dev`  
+viteの起動を行う  
+css,js等をpublicに配置していない為必要となる。
 
 [サイトURL：http://localhost:8000/](http://localhost:8000/)  
+[開発用サイトURL一覧：http://localhost:8000/dev/routes](http://localhost:8000/dev/routes)  
 [phpMyAdmin:http://localhost:8080/](http://localhost:8080/)
 
 ### .envの設定
 
-.env例
+以下の.envをcloneしたディレクトリの直下に作成する。  
+
+```bash
+cd laravel_docker
+vi .env
+```
+
+<details>
+
+<summary><font color="Red">.env例</font></summary>
 
 ```
 # --- Laravel UID/GID ---
@@ -99,7 +151,13 @@ PMA_PASSWORD=password
 APP_PORT=8000
 MYSQL_PORT=3306
 PMA_PORT=8080
+
 ```
+
+</details>
+
+</details>
+
 
 ## 独習内容
 
@@ -113,14 +171,16 @@ PMA_PORT=8080
 - Spatieによる権限管理
 - 管理画面構築（Filament など）
 - Middleware
+- エラーハンドリング関連
+- Api関連
+- アップロード関連
 
 ### 今後の学習内容
 
-- Api関連
 - イベント、リスナー、キュー
 - CI/CDと自動テスト
-- エラーハンドリング関連
 - セキュリティ対策
+- and more...
 
 ---
 
@@ -142,10 +202,11 @@ PMA_PORT=8080
 
 [Part7: 例外処理、プロバイダ](docs/part7_exeption.md)
 
+[Part8: アップロード関連](docs/part8_upload.md)
+
 [PartX: その他](docs/part_x_other.md)
 
 [開発環境等](docs/開発環境.md)
 
 [ロードマップ](docs/ロードマップ.md)
 
-~~[原文](docs/laravelについて.md)~~

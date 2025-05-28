@@ -131,6 +131,8 @@ server {
 
 ## 起動手順
 
+Laravelを一から作成する場合の手順
+
 ```bash
 # 初回のみイメージビルド
 docker compose build

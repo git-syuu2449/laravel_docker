@@ -5,4 +5,4 @@ set -a
 source .env  # docker/.env を読み込み
 set +a
 
-envsubst < laravel-project/.env.template > laravel-project/.env
+envsubst < laravel-project/_env.template > laravel-project/.env

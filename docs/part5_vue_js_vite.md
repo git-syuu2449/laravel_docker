@@ -1,4 +1,4 @@
-# Part 5: Vue / JavaScript / Vite（詳細版）
+# Part 5: Vue / JavaScript / Vite
 
 ## Vueとの連携（非同期処理）
 
