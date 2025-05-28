@@ -88,7 +88,9 @@ gitの利用が可能な状態を前提
 
 ### コンテナの起動
 
-事前準備として、.envの配置を行う必要がある。  
+#### 事前準備
+
+設定の共通化をdockerとlaravel側でしている為、.envの配置を行う必要がある。  
 *.envの配置については.envの設定項を参照*  
 配置後、以下コマンドをコンソールにて実行する。  
 
@@ -105,17 +107,18 @@ UID=1000 GID=1000 docker compose --env-file .env up -d --build
 docker compose exec app bash
 ```
 
-以下はコンテナ内で実施する
+以下はコンテナ内で実施する内容
 
 `cd /var/www/laravel-project`  
 `./setup.sh`  
 setup.sh内でcomposerの実行、migrateを実行する。  
 
-`npm dev run`  
-viteの起動  
-css,js等をpublicに配置していない為必要
+`npm run dev`  
+viteの起動を行う  
+css,js等をpublicに配置していない為必要となる。
 
 [サイトURL：http://localhost:8000/](http://localhost:8000/)  
+[開発用サイトURL一覧：http://localhost:8000/dev/routes](http://localhost:8000/dev/routes)  
 [phpMyAdmin:http://localhost:8080/](http://localhost:8080/)
 
 ### .envの設定
@@ -170,6 +173,7 @@ PMA_PORT=8080
 - Middleware
 - エラーハンドリング関連
 - Api関連
+- アップロード関連
 
 ### 今後の学習内容
 
@@ -197,6 +201,8 @@ PMA_PORT=8080
 [Part6: API](docs/part6_api.md)
 
 [Part7: 例外処理、プロバイダ](docs/part7_exeption.md)
+
+[Part8: アップロード関連](docs/part8_upload.md)
 
 [PartX: その他](docs/part_x_other.md)
 

@@ -4,6 +4,83 @@
 
 Laravelでは、View層は `resources/views` ディレクトリに配置され、Bladeテンプレートエンジンが使用される。  
 
+### bladeについて
+
+ポイントを絞って簡単に記載をする。
+
+- レイアウトの共通化
+
+コンポーネント、スロットの概念がある為、共通化の意識がしやすい。  
+コンポーネント作成は以下のコマンドで作成をする。  
+
+```bash
+php artisan make:component Header
+```
+`resources/views/components/header.blade.php` に作成される。
+
+componentの使用は以下
+
+それぞれの個別のbladeから以下のように利用をする。
+
+```php
+@extends('layouts.app')
+```
+
+詳細は下記 View構造と共通化方針 を参照
+
+
+- @tag（ディレクティブ）
+
+@tag名()という書き方ができる。
+
+```html
+@section
+〜〜
+@endsection
+```
+
+条件でclassを分けるときは以下のような書き方ができる。
+
+```html
+<span @class([
+    'p-4',
+    'font-bold' => $isActive,
+])></span>
+```
+
+基本的には静的なhtmlから埋め込みする際に書き方に乖離が出る。  
+デザイナーとの連携の観点から、ロジック関係以外使わなくてもいいと思われる。
+
+- ループ、判定が行える
+
+一部を抜粋
+
+```php
+@if
+  ここに処理
+@endif
+
+@foreach
+  ここに処理
+@endforeach
+
+@switch
+  @case
+    ここに処理
+  @default
+@endswitch
+```
+
+- エスケープ関連
+
+  - エスケープして表示
+
+   `{{ $hoge }}`
+
+  - エスケープせず表示
+
+  `{ $hoge }`
+
 ### View構造と共通化方針
 
 - `layouts/app.blade.php` をベースレイアウトとし、共通のCSS/JSを読み込み
@@ -32,6 +109,8 @@ Laravelでは、View層は `resources/views` ディレクトリに配置され�
 - TailwindやVueとの連携を意識して、必要な画面にのみアセットを読み込むように設計。
 
 ---
+
+<!-- viewのボリュームが多い為別途わける -->
 
 ## Routing
 
@@ -114,3 +193,60 @@ php artisan migrate:fresh --seed
 
 - View, Routing, Migration, Seeder はLaravelの基盤となる重要機能です。
 - 各レイヤーで責務を明確に分離することで、テストや拡張に強い構成を意識しました。
+
+
+---
+
+## DB
+
+## トランザクションについて
+
+一度にテーブルを複数操作する場合や、DB操作後にメール送信等の処理を行う場合は、整合性の担保がされる必要がある。  
+トランザクション処理はLaravelでは以下のように行う。  
+
+```php
+// トランザクション
+DB::beginTransaction();
+
+try {
+  // 登録処理などの実施
+
+  // コミット処理
+  DB::commit();
+
+} catch {
+  // 例外発生時
+
+  // ロールバック処理
+  DB::rollBack();
+
+  throw $e;
+}
+
+```
+
+## 排他制御について
+
+上記のトランザクションに関連して、整合性の担保をする為に排他制御を行う必要がある。  
+排他制御はLaravelでは以下のように行う。  
+
+- 行ロック
+
+```php
+モデル::find(id)->lockForUpdate()
+```
+
+- テーブルロック
+
+```php
+モデル::lockForUpdate();
+```
+
+処理としては　`SELECT … FOR UPDATE ` を発行している。
+
+### 補足
+
+削除処理後に更新されようとしている時の対策として、 `withTrashed` を利用する。  
+ソフトデリートされたデータの取得を行える。
+
+
