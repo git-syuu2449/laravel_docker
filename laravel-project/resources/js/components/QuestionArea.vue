@@ -1,7 +1,7 @@
 <!-- 質問一覧のvueのラッパー -->
 <template>
     <div>
-        <question-list-button 
+        <question-list-search 
             :getUrl="props.getUrl"
             @questionsLoaded="handleUpdate"
          />
@@ -12,8 +12,9 @@
 <script setup>
 import { ref } from 'vue'
 
+// 一覧
 import QuestionList from './QuestionList.vue'
-import QuestionListButton from './QuestionListButton.vue'
+import QuestionListSearch from './QuestionListSearch.vue'
 
 const props = defineProps({
   initialQuestions: Array,

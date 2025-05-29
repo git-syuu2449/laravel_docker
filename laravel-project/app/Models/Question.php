@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Models\Scopes\QuestionScopes;
+
 /**
  * Summary of Question
  */
@@ -14,6 +16,9 @@ class Question extends Model
     /** @use HasFactory<\Database\Factories\QuestionFactory> */
     use HasFactory;
     use SoftDeletes;
+
+    // スコープ
+    use QuestionScopes;
 
     /**
      * 入力可能なカラム
@@ -52,11 +57,6 @@ class Question extends Model
     public function scopeWithQuestionImages($query)
     {
         return $query->with('questionImages');
-    }
-
-    public function scopeId($query, $id)
-    {
-        return $query->where('id', $id);
     }
 
     /**
