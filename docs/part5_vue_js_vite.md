@@ -83,6 +83,25 @@ npm run dev
 npm run build
 ```
 
+### TailWindの設定
+
+np, run dev実行時に追加、設定したclassをホットリロードでビルドする。  
+tailwind.config.jsに設定を追記する。  
+追加をしないと毎回手動で立ち上げ直す必要がある。
+
+
+```js
+content: [
+        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+        './storage/framework/views/*.php',
+        './resources/**/*.blade.php',
+        './resources/**/*.js',
+        './resources/**/*.css',
+        './resources/**/*.vue',
+    ],
+
+```
+
 ---
 
 ## 工夫点と課題
