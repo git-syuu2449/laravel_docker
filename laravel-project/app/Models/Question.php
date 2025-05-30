@@ -41,23 +41,9 @@ class Question extends Model
         return $this->hasMany(QuestionImage::class);
     }
 
-    /**
-     * Summary of scopeWithChoices
-     * select * from `choices` where `choices`.`question_id` in (1, ...) and `choices`.`deleted_at` is null
-     * @param mixed $query
-     */
-    public function scopeWithChoices($query)
+    public function user()
     {
-        return $query->with('choices');
-    }
-
-    /**
-     * Summary of scopeWithQuestionImages
-     * @param mixed $query
-     */
-    public function scopeWithQuestionImages($query)
-    {
-        return $query->with('questionImages');
+        return $this->belongsTo(User::class);
     }
 
     /**

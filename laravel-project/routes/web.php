@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 # 独自追加
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ChoiceController;
+use App\Http\Controllers\DashboardController;
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboradController;
 use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;
@@ -22,9 +23,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified', 'role:'.Role::User->value])
+// 正確には user/{$id}/dashboardが妥当
+Route::get(uri: 'dashboard',action:  [ DashboardController::class, 'index'])
+->middleware(['auth', 'verified', 'role:'.Role::User->value])
 ->name('dashboard');
 
 Route::middleware('auth')->group(function () {

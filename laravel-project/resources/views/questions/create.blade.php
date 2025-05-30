@@ -17,8 +17,8 @@
             @csrf
             <div id="app-vue">
                 <question-form
-                    :errors='@json($errors->toArray())'
-                    :old='@json(old())'
+                    v-bind:errors='@json($errors->toArray())'
+                    v-bind:old='@json(old())'
                 ></question-form>
             </div>
             <div class="text-right">

@@ -21,6 +21,16 @@ trait QuestionScopes
     }
 
     /**
+     * user_id
+     * @param mixed $query
+     * @param mixed $id
+     */
+    public function scopeUserId(Builder $query, $user_id)
+    {
+        return $query->where('user_id', $user_id);
+    }
+
+    /**
      * title部分一致
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param string $text
@@ -62,5 +72,24 @@ trait QuestionScopes
     public function scopeToDate(Builder $query, string $date)
     {
         return $query->where('pub_date', '<=', $date);
+    }
+
+    /**
+     * withChoices
+     * select * from `choices` where `choices`.`question_id` in (1, ...) and `choices`.`deleted_at` is null
+     * @param mixed $query
+     */
+    public function scopeWithChoices($query)
+    {
+        return $query->with('choices');
+    }
+
+    /**
+     * withQuestionImage
+     * @param mixed $query
+     */
+    public function scopeWithQuestionImages($query)
+    {
+        return $query->with('questionImages');
     }
 }
