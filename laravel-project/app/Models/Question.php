@@ -22,9 +22,10 @@ class Question extends Model
 
     /**
      * 入力可能なカラム
+     * 許可されないカラムは除外
      * @var array
      */
-    protected $fillable = ['user_id', 'question_text', 'pub_date'];
+    protected $fillable = ['user_id', 'title', 'body', 'pub_date'];
 
     /**
      * Summary of choices

@@ -10,8 +10,8 @@
 @endpush
 
 @section(section: 'content')
-    <section class="'text-gray-600 w-full flex flex-col items-center px-2">
-        <h2 class="text-3xl font-bold mt-10">質問登録</h2>
+    <div class="bg-white p-6 sm:p-10 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">質問登録</h2>
 
         <div id="app-vue">
             <question-form
@@ -21,5 +21,4 @@
                 :post-url="'{{ route('questions.store') }}'"
             ></question-form>
         </div>
-    </section>
 @endsection

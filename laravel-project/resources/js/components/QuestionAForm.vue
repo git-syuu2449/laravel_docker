@@ -1,14 +1,22 @@
 <template>
-  <form @submit.prevent="submitForm" class="shadow-md rounded-md bg-white w-full max-w-2xl p-10" enctype="multipart/form-data">
+  <form @submit.prevent="submitForm" class="space-y-6" enctype="multipart/form-data">
     <QuestionFormBody
       ref="formBodyRef"
       :errors="errors"
       :old="old"
     />
     <p v-if="success" class="text-green-600 mt-2">登録が完了しました</p>
-    <div class="flex justify-center">
-      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">登録</button>
+
+    <!-- 送信ボタン -->
+    <div class="text-right">
+      <button
+        type="submit"
+        class="u-form-primary-btn"
+      >
+        登録
+      </button>
     </div>
+
   </form>
 </template>
 
@@ -32,7 +40,8 @@ const submitForm = async () => {
   // 子の値をセット
   const formData = formBodyRef.value.getFormData()
 
-  form.append('question_text', formData.question_text)
+  form.append('title', formData.title)
+  form.append('body', formData.body)
   for (let i = 0; i < formData.images.length; i++) {
     form.append('images[]', formData.images[i])
   }

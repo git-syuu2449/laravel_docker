@@ -1,35 +1,53 @@
 <template>
-  <div class="mb-4">
-    <label for="question_text"><span class="text-red-600">*</span> 質問内容</label>
+  <!-- タイトル -->
+  <div>
+    <label for="title" class="block text-sm font-medium text-gray-700">
+      <span class="text-red-600">*</span> タイトル
+    </label>
     <input
       type="text"
-      id="question_text"
-      name="question_text"
-      v-model="form.question_text"
-      class="border w-full"
+      id="title"
+      name="title"
+      v-model="form.title"
+      class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
     />
-    <p v-if="errors.question_text" class="text-red-500 text-sm">{{ errors.question_text[0] }}</p>
+    <p v-if="errors.title" class="text-red-500 text-sm mt-1">{{ errors.title[0] }}</p>
   </div>
 
-  <div class="mb-4">
-    <label for="images">画像</label>
+  <!-- 本文 -->
+  <div>
+    <label for="body" class="block text-sm font-medium text-gray-700">
+      <span class="text-red-600">*</span> 本文
+    </label>
+    <textarea
+      id="body"
+      name="body"
+      v-model="form.body"
+      rows="6"
+      class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+    ></textarea>
+    <p v-if="errors.body" class="text-red-500 text-sm mt-1">{{ errors.body[0] }}</p>
+  </div>
+
+  <!-- 画像 -->
+  <div>
+    <label for="images" class="block text-sm font-medium text-gray-700">画像</label>
     <input
       type="file"
       id="images"
       name="images[]"
       multiple
       @change="handleFiles"
-      class="border w-full"
+      class="mt-1 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
+            file:rounded-md file:border-0 file:text-sm file:font-semibold
+            file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
     />
-    <p v-if="errors.images" class="text-red-500 text-sm">{{ errors.images[0] }}</p>
-    <div v-if="hasImageErrors">
-      <ul>
-        <li v-for="(message, index) in imageErrorMessages" :key="index" class="text-red-500">
-          {{ message }}
-        </li>
-      </ul>
-    </div>
+    <p v-if="errors.images" class="text-red-500 text-sm mt-1">{{ errors.images[0] }}</p>
+    <ul v-if="hasImageErrors" class="mt-2 list-disc list-inside text-red-500 text-sm">
+      <li v-for="(message, index) in imageErrorMessages" :key="index">{{ message }}</li>
+    </ul>
   </div>
+
 </template>
 
 <script setup>
@@ -42,7 +60,8 @@ const props = defineProps({
 
 // ローカル状態
 const form = reactive({
-  question_text: props.old.question_text || '',
+  title: props.old.title || '',
+  body: props.old.body || '',
   images: [],
 })
 

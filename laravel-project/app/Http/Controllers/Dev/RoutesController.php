@@ -38,7 +38,8 @@ class RoutesController extends Controller
         // アクションごとのPOSTフィールド構成
         $postForms = [
             'questions.store' => [
-                'question_text' => ['type' => 'input', 'value' => '仮の質問'],
+                'title' => ['type' => 'input', 'value' => '仮の質問タイトル'],
+                'body' => ['type' => 'input', 'value' => '仮の質問本文'],
                 // 'category' => ['type' => 'select', 'options' => ['math', 'science']],
             ],
             'users' => [

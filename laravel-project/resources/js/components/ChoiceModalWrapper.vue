@@ -1,17 +1,26 @@
 <template>
-    <Modal v-if="show" @close="show = false">
-      <Choiceorm :post-url="postUrl" :question-id="questionId" @submitted="onSubmitted" />
-    </Modal>
-  
-    <button @click="show = true">評価を追加</button>
-  </template>
+  <Modal v-if="show" @close="show = false">
+    <ChoiceForm
+      :post-url="postUrl"
+      :question-id="questionId"
+      @submitted="onSubmitted"
+    />
+  </Modal>
+
+  <button
+    @click="show = true"
+    class="mt-4 inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+  >
+    評価を追加
+  </button>
+</template>
   
   <script setup>
   import { ref } from 'vue'
   import Modal from './Modal.vue'
-  import Choiceorm from './ChoiceForm.vue'
+  import ChoiceForm from './ChoiceForm.vue'
   
-  defineProps({
+  const props = defineProps({
     postUrl: String,
     questionId: Number
   })

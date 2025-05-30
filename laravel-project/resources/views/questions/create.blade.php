@@ -10,10 +10,10 @@
 @endpush
 
 @section(section: 'content')
-    <section class="'text-gray-600 w-full flex flex-col items-center px-2">
-        <h2 class="text-3xl font-bold mt-10">質問登録</h2>
+    <div class="bg-white p-6 sm:p-10 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">投稿フォーム</h2>
 
-        <form method="POST" action="{{ route('questions.store') }} " enctype="multipart/form-data">
+        <form method="POST" action="{{ route('questions.store') }} " enctype="multipart/form-data" class="space-y-6">
             @csrf
             <div id="app-vue">
                 <question-form
@@ -21,9 +21,17 @@
                     :old='@json(old())'
                 ></question-form>
             </div>
-            <button type="submit" class="btn btn-primary">登録</button>
+            <div class="text-right">
+                <button
+                    type="submit"
+                    class="u-form-primary-btn"
+                >
+                    登録
+                </button>
+            </div>
         </form>
-    </section>
+        
+    </div>
 @endsection
 
 {{-- デバッグ用 --}}

@@ -77,9 +77,24 @@ componentの使用は以下
 
    `{{ $hoge }}`
 
-  - エスケープせず表示
+   - エスケープせず表示
 
-  `{ $hoge }`
+   `{!! $question->body !!}`
+
+  - エスケープしつつ改行表示
+
+  `{!! nl2br(e($text)) !!}`
+
+  エスケープしないで表示はセキュティ的にNGな為やらない。
+
+  もしくは、cssで改行を処理する。
+  
+  ```css
+  // styleベタ書き
+  style="white-space: pre-line;"
+  // tailwind使用
+  class="whitespace-pre-line"
+  ```
 
 ### View構造と共通化方針
 

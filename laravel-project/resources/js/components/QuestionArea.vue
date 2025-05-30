@@ -1,12 +1,10 @@
 <!-- 質問一覧のvueのラッパー -->
 <template>
-    <div>
-        <question-list-search 
-            :getUrl="props.getUrl"
-            @questionsLoaded="handleUpdate"
-         />
-        <question-list :questions="questions" />
-    </div>
+  <question-list-search 
+      :getUrl="props.getUrl"
+      @questionsLoaded="handleUpdate"
+  />
+  <question-list :questions="questions" />
 </template>
 
 <script setup>

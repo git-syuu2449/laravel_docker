@@ -21,14 +21,25 @@ trait QuestionScopes
     }
 
     /**
-     * question_text部分一致
+     * title部分一致
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param string $text
      * @return Builder
      */
-    public function scopeSearchText(Builder $query, string $text)
+    public function scopeSearchTitle(Builder $query, string $text)
     {
-        return $query->where('question_text', 'like', "%{$text}%");
+        return $query->where('title', 'like', "%{$text}%");
+    }
+
+    /**
+     * body部分一致
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $text
+     * @return Builder
+     */
+    public function scopeSearchBody(Builder $query, string $text)
+    {
+        return $query->where('body', 'like', "%{$text}%");
     }
 
     /**
