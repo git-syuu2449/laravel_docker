@@ -32,7 +32,8 @@ const submitForm = async () => {
   // 子の値をセット
   const formData = formBodyRef.value.getFormData()
 
-  form.append('question_text', formData.question_text)
+  form.append('title', formData.title)
+  form.append('body', formData.body)
   for (let i = 0; i < formData.images.length; i++) {
     form.append('images[]', formData.images[i])
   }

@@ -23,8 +23,8 @@ class QuestionStoreTest extends TestCase
     {
         $target_url = route("questions.store");
         $test_data = [
-            // "question_text" => "testDataOK" // factory
-            "question_text" => $this->faker->realText(200)
+            "title" => $this->faker->realText(200),
+            "body" => $this->faker->realText(500)
         ];
         $response = $this->post($target_url, $test_data);
 
@@ -41,15 +41,16 @@ class QuestionStoreTest extends TestCase
      * @return void
      */
     #[Test]
-    public function question_text_is_required()
+    public function title_is_required()
     {
         $target_url = route("questions.store");
         $test_data = [
-            "question_text" => "" 
+            "title" => "" ,
+            "body" => "本文の登録テスト",
         ];
         $response = $this->post($target_url, $test_data);
 
         // エラーが発生すること
-        $response->assertSessionHasErrors('question_text');
+        $response->assertSessionHasErrors('title');
     }
 }

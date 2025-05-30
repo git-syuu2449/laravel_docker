@@ -23,8 +23,12 @@ class QuestionSearchService
     {
         $query = Question::query();
 
-        if (!empty($params['question_text'])) {
-            $query->where('question_text', 'like', '%' . $params['question_text'] . '%');
+        if (!empty($params['title'])) {
+            $query->where('title', 'like', '%' . $params['title'] . '%');
+        }
+
+        if (!empty($params['body'])) {
+            $query->where('body', 'like', '%' . $params['body'] . '%');
         }
 
         if (!empty($params['pub_date_from'])) {
@@ -47,8 +51,12 @@ class QuestionSearchService
     {
         $query = Question::query();
 
-        if (!empty($params['question_text'])) {
-            $query->searchText($params['question_text']);
+        if (!empty($params['title'])) {
+            $query->searchTitle($params['title']);
+        }
+
+        if (!empty($params['body'])) {
+            $query->searchBody($params['body']);
         }
 
         if (!empty($params['pub_date_from'])) {

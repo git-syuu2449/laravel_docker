@@ -4,15 +4,27 @@
   <form @submit.prevent="submitForm" class="shadow-md rounded-md bg-white w-full max-w-2xl p-10">
 
     <div class="mb-4">
-      <label for="question_text">質問内容</label>
+      <label for="title">タイトル</label>
       <input
         type="text"
-        id="question_text"
-        name="question_text"
-        v-model="form.question_text" 
+        id="title"
+        name="title"
+        v-model="form.title" 
         class="border w-full"
       />
-      <p v-if="errors.question_text" class="text-red-500 text-sm">{{ errors.question_text[0] }}</p>
+      <p v-if="errors.title" class="text-red-500 text-sm">{{ errors.title[0] }}</p>
+    </div>
+
+    <div class="mb-4">
+      <label for="body">本文</label>
+      <input
+        type="text"
+        id="body"
+        name="body"
+        v-model="form.body" 
+        class="border w-full"
+      />
+      <p v-if="errors.body" class="text-red-500 text-sm">{{ errors.body[0] }}</p>
     </div>
 
     <div class="mb-4">
@@ -61,7 +73,8 @@ const props = defineProps({
 const emit = defineEmits(["questionsLoaded"])
 
 const form = ref({
-  question_text: '',
+  title: '',
+  body: '',
   pub_date_to: null,
 })
 const errors = ref({})

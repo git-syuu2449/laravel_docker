@@ -33,7 +33,8 @@ class StoreQuestionRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'question_text' => ['required', 'string', 'max:255', 'min:10'],
+            'title' => ['required', 'string', 'max:255', 'min:10'],
+            'body' => ['required', 'string', 'max:500', 'min:10'],
             'images' => ['required', 'array'],
             'images.*' => ['bail', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
         ];
@@ -41,63 +42,61 @@ class StoreQuestionRequest extends BaseFormRequest
 
     /**
      * バリデーション前処理
+     * バリデーション前に何か処理が必要な場合はここに差し込める
      * @return void
      */
     protected function prepareForValidation()
     {
         // 入力データ取得
-        $question_text = $this->input('question_text');
+        $title = $this->input('title');
+        $body = $this->input('body');
         $images = $this->file('images');
     }
 
     /**
      * 追加バリデーション処理
+     * 独自のバリデーション処理を行う場合はここで行う。
      * @param \Illuminate\Validation\Validator $validator
      * @return void
      */
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {
-            $question_text = $this->input('question_text');
+            $title = $this->input('title');
         });
     }
 
     /**
      * バリデーション後処理
+     * バリデーション後に整形等何か処理が必要な場合はここに差し込める
      * @return void
      */
     protected function passedValidation()
     {
-        $question_text = $this->input('question_text');
+        $title = $this->input('title');
     }
 
     /**
      * エラーメッセージの定義
-     * @return array{body.min: string, question_text.required: string}
+     * @return array{body.min: string, title.required: string}
      */
     public function messages()
     {
         // validation.phpを参照するようにした。lang/*/validation.phpに記載がある場合は個別の設定は不要
+        // 明示的に記載するのはあり
         return [
         ];
-        /*
-        return [
-            // question_text
-            'question_text.required' => ':attribute は必須です。',
-            'question_text.max' => ':attribute は :max 文字まで入力可能です。',
-            'question_text.min' => ':attribute は最低 :min 文字必要です。',
-        ];
-        */
     }
 
     /**
      * 属性名の定義
-     * @return array{body: string, question_text: string}
+     * @return array{body: string, images: string, images.*: string, title: string}
      */
     public function attributes()
     {
         return [
-            'question_text' => '質問内容',
+            'title' => 'タイトル',
+            'body' => '本文',
             'images' => '画像',
             'images.*' => '画像',
         ];

@@ -30,7 +30,8 @@ class QuestionService
             // 質問テーブルへの登録を行う
             $question = Question::create([
                 'user_id' => $user->id,
-                'question_text' => $request->input('question_text'),
+                'title' => $request->input('title'),
+                'body' => $request->input('body'),
                 'pub_date' => now(),
             ]);
 

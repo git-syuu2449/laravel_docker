@@ -1,14 +1,27 @@
 <template>
   <div class="mb-4">
-    <label for="question_text"><span class="text-red-600">*</span> 質問内容</label>
+    <label for="title"><span class="text-red-600">*</span> タイトル</label>
     <input
       type="text"
-      id="question_text"
-      name="question_text"
-      v-model="form.question_text"
+      id="title"
+      name="title"
+      v-model="form.title"
       class="border w-full"
     />
-    <p v-if="errors.question_text" class="text-red-500 text-sm">{{ errors.question_text[0] }}</p>
+    <p v-if="errors.title" class="text-red-500 text-sm">{{ errors.title[0] }}</p>
+  </div>
+
+  <div class="mb-4">
+    <label for="body"><span class="text-red-600">*</span> 本文</label>
+    <textarea
+      id="body"
+      name="body"
+      v-model="form.body"
+      class="border w-full"
+      rows="6"
+    >
+    </textarea>
+    <p v-if="errors.body" class="text-red-500 text-sm">{{ errors.body[0] }}</p>
   </div>
 
   <div class="mb-4">
@@ -42,7 +55,8 @@ const props = defineProps({
 
 // ローカル状態
 const form = reactive({
-  question_text: props.old.question_text || '',
+  title: props.old.title || '',
+  body: props.old.body || '',
   images: [],
 })
 

@@ -32,7 +32,8 @@ class SearchQuestionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'question_text' => ['string', 'nullable'],
+            'title' => ['string', 'nullable'],
+            'body' => ['string', 'nullable'],
             'pub_date_from' => ['bail', 'date', 'before_or_equal:pub_date_to'],
             'pub_date_to' => ['bail', 'date', 'after_or_equal:pub_date_from'],
         ];
@@ -45,7 +46,8 @@ class SearchQuestionRequest extends FormRequest
     public function attributes()
     {
         return [
-            'question_text' => '質問内容',
+            'title' => '質問タイトル',
+            'body' => '質問本文',
             'pub_date_from' => '投稿日時：From',
             'pub_date_to' => '投稿日時：To',
         ];

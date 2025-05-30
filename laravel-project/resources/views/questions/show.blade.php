@@ -23,8 +23,12 @@
             {{ $question->pub_date }}
         </span>
         <h3>
-            {{ $question->question_text }}
+            {{ $question->title }}
         </h3>
+
+        <p>
+            {!! nl2br(e($question->body)) !!}
+        </p>
 
         <div>
             @if (!$question->questionImages->isEmpty())
