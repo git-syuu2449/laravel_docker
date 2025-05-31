@@ -5,6 +5,8 @@ namespace App\Services;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
 
+use Illuminate\Support\Facades\Gate;
+
 use App\Models\Question;
 
 class QuestionSearchService
@@ -37,7 +39,14 @@ class QuestionSearchService
             $query->whereDate('pub_date', '<=', $to);
         }
 
-        return $query->get();
+        $questions = $query->get();
+
+        // 評価可能かを判定してセット
+        $questions->each(function ($question) {
+            $question['can_be_evaluated'] = Gate::allows('evaluate', $question);
+        });
+
+        return $questions;
     }
 
     /**
@@ -47,7 +56,8 @@ class QuestionSearchService
      */
     public function search(array $params)
     {
-        $query = Question::query();
+        // 評価済み判定の為に子テーブルも読み込む
+        $query = Question::with('choices');
 
         if (!empty($params['title'])) {
             $query->searchTitle($params['title']);
@@ -67,7 +77,14 @@ class QuestionSearchService
             $query->toDateTime($to);
         }
 
-        return $query->get();
+        $questions = $query->get();
+
+        // 評価可能かを判定してセット
+        $questions->each(function ($question) {
+            $question['can_be_evaluated'] = Gate::allows('evaluate', $question);
+        });
+
+        return $questions;
     }
 
 }

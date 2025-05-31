@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 use App\Models\Scopes\QuestionScopes;
 
@@ -26,6 +28,12 @@ class Question extends Model
      * @var array
      */
     protected $fillable = ['user_id', 'title', 'body', 'pub_date'];
+
+    /**
+     * 評価可能かのプロパティ
+     * @var bool
+     */
+    public bool $can_be_evaluated = false;
 
     /**
      * Summary of choices
@@ -69,5 +77,14 @@ class Question extends Model
         ->select('questions.*', 'choices.choice_text as choice_text')
         ->where('questions.id', $id)
         ->get();
+    }
+
+    /**
+     * 投稿したユーザーの判定
+     * @return bool
+     */
+    public function getIsPostQuestionAttribute()
+    {
+        return Auth::id() !== $this->user_id;
     }
 }

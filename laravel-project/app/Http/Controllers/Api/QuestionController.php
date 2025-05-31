@@ -25,10 +25,6 @@ class QuestionController extends Controller
         // 渡された検索条件を元に検索
         $questions = $service->search($validated);
 
-        $questions->each(function ($question) {
-            $question['can_be_evaluated'] = Auth::id() !== $question->user_id;
-        });
-
         return response()->json([
             'status' => true,
             'questions' => $questions
