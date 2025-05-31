@@ -74,4 +74,17 @@ class Choice extends Model
             ->get();
     }
 
+    /**
+     * 削除用Url
+     * @return string
+     */
+    public function getDeleteUrlAttribute()
+    {
+        // route('api.choices.destroy', ['question_id'=>$choice->question_id, 'choice_id' => $choice->id])
+        return route('api.questions.choices.destroy', [
+            'question_id' => $this->question_id,
+            'choice_id' => $this->id,
+        ]);
+    }
+
 }

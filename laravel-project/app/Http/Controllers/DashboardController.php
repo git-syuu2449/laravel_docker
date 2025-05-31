@@ -23,9 +23,15 @@ class DashboardController extends Controller
         $user = Auth::user();
         // 1と2
         $questions = Question::with(['choices'])->userId($user->id)->get();
+        $questions->each(function ($question) {
+        });
 
         // 3
-        $choices = Choice::userId($user->id)->get();
+        $choices = [];
+        // $choices = Choice::userId($user->id)->get();
+        // $choices->each(function ($choice) {
+        //     $choice['delete_url'] = $choice->delete_url;
+        // });
 
         return view(view: 'dashboard', data: compact('questions', 'choices'));
     }
