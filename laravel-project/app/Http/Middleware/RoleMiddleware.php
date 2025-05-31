@@ -32,7 +32,7 @@ class RoleMiddleware
         }
 
         // 管理者の場合は一般ユーザーの機能が使用可能
-        if ($request->user()->role === Role::Admin->value) {
+        if ($request->user()->role->value === Role::Admin->value) {
             return $next($request);
         }
 

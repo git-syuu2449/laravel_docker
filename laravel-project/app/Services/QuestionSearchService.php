@@ -2,14 +2,10 @@
 
 namespace App\Services;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Carbon;
 
-use App\Models\User;
 use App\Models\Question;
-use App\Models\QuestionImage;
 
 class QuestionSearchService
 {
@@ -32,11 +28,13 @@ class QuestionSearchService
         }
 
         if (!empty($params['pub_date_from'])) {
-            $query->whereDate('pub_date', '>=', $params['pub_date_from']);
+            $from = Carbon::parse($params['pub_date_from'])->startOfDay();
+            $query->whereDate('pub_date', '>=', $from);
         }
 
         if (!empty($params['pub_date_to'])) {
-            $query->whereDate('pub_date', '<=', $params['pub_date_to']);
+            $to = Carbon::parse($params['pub_date_to'])->endOfDay();
+            $query->whereDate('pub_date', '<=', $to);
         }
 
         return $query->get();
@@ -60,11 +58,13 @@ class QuestionSearchService
         }
 
         if (!empty($params['pub_date_from'])) {
-            $query->fromDate($params['pub_date_from']);
+            $from = Carbon::parse($params['pub_date_from'])->startOfDay();
+            $query->fromDateTime($from);
         }
 
         if (!empty($params['pub_date_to'])) {
-            $query->toDate($params['pub_date_to']);
+            $to = Carbon::parse($params['pub_date_to'])->endOfDay();
+            $query->toDateTime($to);
         }
 
         return $query->get();

@@ -18,6 +18,9 @@ class QuestionController extends Controller
     public function index()
     {
         $questions = Question::all();
+        $questions->each(function ($question) {
+            $question['can_be_evaluated'] = Auth::id() !== $question->user_id;
+        });
         return view(view: 'questions.index', data: compact('questions'));
     }
 

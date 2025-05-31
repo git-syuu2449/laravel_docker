@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Requests\SearchQuestionRequest;
 use App\Services\QuestionSearchService;
@@ -23,6 +24,10 @@ class QuestionController extends Controller
 
         // 渡された検索条件を元に検索
         $questions = $service->search($validated);
+
+        $questions->each(function ($question) {
+            $question['can_be_evaluated'] = Auth::id() !== $question->user_id;
+        });
 
         return response()->json([
             'status' => true,

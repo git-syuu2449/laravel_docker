@@ -2,6 +2,7 @@
 
 namespace App\Models\Scopes;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -55,23 +56,23 @@ trait QuestionScopes
     /**
      * 投稿日時From
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $date
+     * @param DateTime $dateTime
      * @return Builder
      */
-    public function scopeFromDate(Builder $query, string $date)
+    public function scopeFromDateTime(Builder $query, DateTime $dateTime)
     {
-        return $query->where('pub_date', '>=', $date);
+        return $query->where('pub_date', '>=', $dateTime);
     }
 
     /**
      * 投稿日時To
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $date
+     * @param DateTime $dateTime
      * @return Builder
      */
-    public function scopeToDate(Builder $query, string $date)
+    public function scopeToDateTime(Builder $query, DateTime $dateTime)
     {
-        return $query->where('pub_date', '<=', $date);
+        return $query->where('pub_date', '<=', $dateTime);
     }
 
     /**

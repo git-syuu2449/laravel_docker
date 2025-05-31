@@ -13,7 +13,7 @@
           <p class="text-gray-700 whitespace-pre-line mb-2">
             {{ truncate(question.body, 100) }}
           </p>
-          <a :href="`/questions/${question.id}`" class="text-blue-600 hover:underline">評価</a>
+          <a v-if="question.can_be_evaluated === true" :href="`/questions/${question.id}`" class="text-blue-600 hover:underline">評価</a>
         </li>
       </ul>
     </template>

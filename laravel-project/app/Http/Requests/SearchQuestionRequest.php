@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SearchQuestionRequest extends FormRequest
+class SearchQuestionRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -34,8 +34,8 @@ class SearchQuestionRequest extends FormRequest
         return [
             'title' => ['string', 'nullable'],
             'body' => ['string', 'nullable'],
-            'pub_date_from' => ['bail', 'date', 'before_or_equal:pub_date_to'],
-            'pub_date_to' => ['bail', 'date', 'after_or_equal:pub_date_from'],
+            'pub_date_from' => ['bail', 'nullable', 'date'],
+            'pub_date_to' => ['bail', 'nullable', 'date'],
         ];
     }
 
@@ -51,5 +51,22 @@ class SearchQuestionRequest extends FormRequest
             'pub_date_from' => '投稿日時：From',
             'pub_date_to' => '投稿日時：To',
         ];
+    }
+
+    /**
+     * 追加のバリデーション
+     * @param mixed $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        // 両方の入力がある場合のみチェック
+        $validator->sometimes('pub_date_from', 'before_or_equal:pub_date_to', function ($input) {
+            return !empty($input->pub_date_to);
+        });
+
+        $validator->sometimes('pub_date_to', 'after_or_equal:pub_date_from', function ($input) {
+            return !empty($input->pub_date_from);
+        });
     }
 }
