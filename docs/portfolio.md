@@ -1,4 +1,4 @@
-# Laravel × Vue Quiz App（ポートフォリオ紹介）
+# ポートフォリオ
 
 ## 概要
 
@@ -15,6 +15,22 @@
 - Laravel Breezeによる認証機能
 - APIによるフロント・バックエンド分離
 
+## 画面遷移図
+
+<details>
+
+<summary><font color="Red">キャプチャを表示</font></summary>
+
+![画面遷移図](../docs/images/tran.png)
+
+</details>
+
+### 補足
+
+※ 質問削除・評価削除・評価登録はいずれも API 経由で処理され、画面遷移を伴いません。  
+　各機能はVueコンポーネント内でAxiosを使って実行し、成功時にUI更新を行っています。
+
+
 ## 画面キャプチャ
 
 ### 質問一覧（検索フォーム + 表示）
@@ -23,7 +39,13 @@
 
 <summary><font color="Red">キャプチャを表示</font></summary>
 
-![質問一覧](./images/question-index.png)
+<p>質問一覧：初期表示</p>
+<img src="./images/question-index.png" width="70%" />
+
+<p>質問一覧：検索時</p>
+<img src="./images/question-index-search.png" width="70%" />
+
+検索時は非同期で取得の上一覧を再表示(vueコンポーネント)
 
 </details>
 
@@ -33,9 +55,13 @@
 
 <summary><font color="Red">キャプチャを表示</font></summary>
 
-![投稿画面](./images/question-create.png)
+<p>質問登録：初期表示</p>
+<img src="./images/question-create.png" width="70%" />
 
-![投稿画面エラー](./images/question-create-error.png)
+<p>質問登録：エラー</p>
+<img src="./images/question-create-error.png" width="70%" />
+
+登録成功時は質問一覧にリダイレクト処理
 
 </details>
 
@@ -45,11 +71,19 @@
 
 <summary><font color="Red">キャプチャを表示</font></summary>
 
-![質問詳細画面](./images/question-show.png)
+<p>質問詳細：初期表示</p>
+<img src="./images/question-show.png" width="70%" />
 
-![評価登録モーダル](./images/choice-create.png)
+<p>質問詳細：評価押下時</p>
+<img src="./images/choice-create.png" width="70%" />
 
-![評価登録モーダル登録後](./images/choice-create-after.png)
+<p>評価登録モーダルエラー</p>
+<img src="./images/choice-create-error.png" width="70%" />
+
+<p>評価登録モーダル登録後</p>
+<img src="./images/choice-create-after.png" width="70%" />
+
+質問詳細に表示する評価一覧は初期は同期、評価時は非同期で取得の上再表示
 
 </details>
 
@@ -59,7 +93,12 @@
 
 <summary><font color="Red">キャプチャを表示</font></summary>
 
-![ダッシュボード画面](./images/dashboard.png)
+<p>ダッシュボード：初期表示</p>
+<img src="./images/dashboard.png" width="70%" />
+
+ログインユーザーの質問、評価、質問に紐づく評価の一覧を取得表示する。  
+あなたの投稿、あなたの評価は非同期で取得(vueコンポーネント)  
+削除押下時、非同期で削除の上、非同期で新規情報を取得の上再表示
 
 </details>
 
@@ -70,19 +109,37 @@
 
 <summary><font color="Red">キャプチャを表示</font></summary>
 
-![URL一覧画面](./images/routes.png)
+<p>URL一覧</p>
+<img src="./images/routes.png" width="70%" />
+
+検証しにくいurlの検証や開発用の画面に即時アクセスできるように作成  
 
 </details>
 
 
 ## 使用技術
 
-- Laravel 11（API & サービス構造）
+### バックエンド
+- Laravel 11
+- Eloquent ORM（リレーション、スコープ）
+- Bladeテンプレート
+- バリデーション（FormRequest）
+- トランザクション制御 / SoftDeletes
+- Exceptionカスタマイズ（Laravel 11の`Application::withExceptions()`使用）
+
+### フロントエンド
 - Vue 3（Composition API）
-- Tailwind CSS（レスポンシブデザイン）
-- Docker（nginx + php + mysql）
-- Vite（フロントビルド）
-- GitHub
+- Tailwind CSS
+- Vite
+- Axios通信
+- LocalStorageによる状態保持
+- TransitionによるUIアニメーション
+
+### インフラ・その他
+- Docker / Docker Compose
+- Nginx + PHP-FPM構成
+- MySQL（8.x系）
+- .envによる環境分離
 
 ## 設計・工夫ポイント
 
