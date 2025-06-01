@@ -175,12 +175,14 @@ PMA_PORT=8080
 - サービスコンテナ関連
 - Api関連
 - アップロード関連
+- ポリシー関連
 
 ### 今後の学習内容
 
 - イベント、リスナー、キュー
 - CI/CDと自動テスト
 - セキュリティ対策
+- Vue3の発展系
 - and more...
 
 ---
@@ -204,6 +206,8 @@ PMA_PORT=8080
 [Part7: 例外処理、プロバイダ](docs/part7_exeption.md)
 
 [Part8: アップロード関連](docs/part8_upload.md)
+
+[Part9: ポリシー関連](docs/part8_policy.md)
 
 [PartX: その他](docs/part_x_other.md)
 

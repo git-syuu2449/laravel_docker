@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use App\Http\Requests\SearchQuestionRequest;
 use App\Services\QuestionSearchService;
+use App\Services\QuestionService;
 
 class QuestionController extends Controller
 {
@@ -28,6 +31,33 @@ class QuestionController extends Controller
             'status' => true,
             'questions' => $questions
         ], 201);
+    }
+
+    /**
+     * 質問削除
+     * 子テーブルの削除、画像削除も合わせて行う。
+     */
+    public function destroy($id, QuestionService $service)
+    {
+        // トランザクション開始
+        try
+        {
+            $service->deleteWithImage($id);
+
+            return response()->json(['message' => '削除に成功しました'], 200);
+
+        }
+        // 404
+        catch (ModelNotFoundException $e) {
+            report($e);
+
+            return response()->json(['message' => '削除に失敗しました'], 404);
+        }
+        catch (\Throwable $e) {
+            report($e);
+
+            return response()->json(['message' => '削除に失敗しました'], 500);
+        }
     }
 
 }

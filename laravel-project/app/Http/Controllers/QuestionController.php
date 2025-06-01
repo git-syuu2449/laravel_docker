@@ -6,18 +6,21 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\StoreQuestionRequest;
+use Illuminate\Support\Facades\Gate;
 
+use App\Http\Requests\StoreQuestionRequest;
 use App\Services\QuestionService;
+use App\Services\QuestionSearchService;
 
 class QuestionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(QuestionSearchService $service)
     {
-        $questions = Question::all();
+        $questions = $service->search([]);
+
         return view(view: 'questions.index', data: compact('questions'));
     }
 
@@ -72,7 +75,9 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-        $question = Question::with(['choices', 'questionImages'])->findOrFail($id);
+        $question = Question::query()->with(['choices', 'questionImages'])->findOrFail($id);
+        // 評価可能か
+        $question->can_be_evaluated = Gate::allows('evaluate', $question);
         return view(view: 'questions.show',data: compact('question'));
     }
 

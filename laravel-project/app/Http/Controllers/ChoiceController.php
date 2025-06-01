@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\StoreChoiceRequest;
+use Illuminate\Support\Facades\Gate;
 
+use App\Http\Requests\StoreChoiceRequest;
 use App\Models\Choice;
+use App\Models\Question;
 
 class ChoiceController extends Controller
 {
@@ -17,8 +19,11 @@ class ChoiceController extends Controller
      */
     public function store(StoreChoiceRequest $request, $question_id)
     {
-        Log::debug('questions/id/choices');
-        Log::debug($request->toArray()); // debug
+        $question = Question::query()->with(['choices'])->findOrFail($question_id);
+
+        // 許可されない場合は403の例外
+        Gate::authorize('evaluate', $question); 
+
         // バリデーション処理
         $validated = $request->validated();
 

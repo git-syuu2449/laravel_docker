@@ -2,6 +2,7 @@
 
 namespace App\Models\Scopes;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -18,6 +19,16 @@ trait QuestionScopes
     public function scopeId(Builder $query, $id)
     {
         return $query->where('id', $id);
+    }
+
+    /**
+     * user_id
+     * @param mixed $query
+     * @param mixed $id
+     */
+    public function scopeUserId(Builder $query, $user_id)
+    {
+        return $query->where('user_id', $user_id);
     }
 
     /**
@@ -45,22 +56,41 @@ trait QuestionScopes
     /**
      * 投稿日時From
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $date
+     * @param DateTime $dateTime
      * @return Builder
      */
-    public function scopeFromDate(Builder $query, string $date)
+    public function scopeFromDateTime(Builder $query, DateTime $dateTime)
     {
-        return $query->where('pub_date', '>=', $date);
+        return $query->where('pub_date', '>=', $dateTime);
     }
 
     /**
      * 投稿日時To
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $date
+     * @param DateTime $dateTime
      * @return Builder
      */
-    public function scopeToDate(Builder $query, string $date)
+    public function scopeToDateTime(Builder $query, DateTime $dateTime)
     {
-        return $query->where('pub_date', '<=', $date);
+        return $query->where('pub_date', '<=', $dateTime);
+    }
+
+    /**
+     * withChoices
+     * select * from `choices` where `choices`.`question_id` in (1, ...) and `choices`.`deleted_at` is null
+     * @param mixed $query
+     */
+    public function scopeWithChoices($query)
+    {
+        return $query->with('choices');
+    }
+
+    /**
+     * withQuestionImage
+     * @param mixed $query
+     */
+    public function scopeWithQuestionImages($query)
+    {
+        return $query->with('questionImages');
     }
 }

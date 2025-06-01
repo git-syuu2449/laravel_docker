@@ -58,11 +58,14 @@ const submitForm = async () => {
     form.value.question_id = ''
     form.value.choice_text = ''
     form.value.votes = ''
-    // @todo モーダルを閉じて一覧をリフレッシュ.現状reload処理
+
     window.location.reload()
   } catch (error) {
     if (error.response?.status === 422) {
       errors.value = error.response.data.errors
+    } else if (error.response?.status === 403) {
+      alert('評価済みです')
+      window.location.reload()
     } else {
       console.error(error)
     }

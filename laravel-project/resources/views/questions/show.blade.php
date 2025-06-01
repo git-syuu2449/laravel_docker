@@ -37,12 +37,16 @@
     @endif
   </div>
 
-  <div id="app-vue" class="mb-10">
-    <choice-modal-wrapper
-      :post-url="'{{ route('choices.store', $question->id) }}'"
-      :question-id="{{ $question->id }}"
-    ></choice-modal-wrapper>
-  </div>
+  @if($question->can_be_evaluated === true)
+    <div id="app-vue" class="mb-10">
+      <choice-modal-wrapper
+        :post-url="'{{ route('choices.store', $question->id) }}'"
+        :question-id="{{ $question->id }}"
+      ></choice-modal-wrapper>
+    </div>
+  @else
+    <p>評価済みです</p>
+  @endif
 
   <div>
     <h4 class="text-xl font-semibold text-gray-800 mb-4">評価一覧</h4>
