@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use App\Http\Requests\SearchQuestionRequest;
 use App\Services\QuestionSearchService;
@@ -29,6 +30,36 @@ class QuestionController extends Controller
             'status' => true,
             'questions' => $questions
         ], 201);
+    }
+
+    /**
+     * 質問削除
+     */
+    public function destroy($question_id)
+    {
+        try
+        {
+            $choice = Question::where([
+                'id' => $question_id,
+                'user_id' => Auth::id(),
+            ])->firstOrFail();
+
+            $choice->delete();
+
+            return response()->json(['message' => '削除に成功しました'], 200);
+
+        }
+        // 404
+        catch (ModelNotFoundException $e) {
+            report($e);
+
+            return response()->json(['message' => '削除に失敗しました'], 404);
+        }
+        catch (\Throwable $e) {
+            report($e);
+
+            return response()->json(['message' => '削除に失敗しました'], 500);
+        }
     }
 
 }

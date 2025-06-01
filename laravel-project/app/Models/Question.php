@@ -87,4 +87,15 @@ class Question extends Model
     {
         return Auth::id() !== $this->user_id;
     }
+
+    /**
+     * 削除用Url
+     * @return string
+     */
+    public function getDeleteUrlAttribute()
+    {
+        return route('api.questions.destroy', [
+            'id' => $this->id,
+        ]);
+    }
 }

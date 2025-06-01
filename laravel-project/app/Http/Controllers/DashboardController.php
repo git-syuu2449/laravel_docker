@@ -18,13 +18,15 @@ class DashboardController extends Controller
         // 1.ユーザーに紐づく質問の取得を行う(一対多)
         // 2.ユーザーに紐づく質問に紐づく回答の取得を行う(多対多)
         // 3.ユーザーに紐づく回答の取得を行う(一対多)
+        // 取得はAPIでの取得に変更
         $data = null;
 
         $user = Auth::user();
         // 1と2
-        $questions = Question::with(['choices'])->userId($user->id)->get();
-        $questions->each(function ($question) {
-        });
+        // $questions = Question::with(['choices'])->userId($user->id)->get();
+        // $questions->each(function ($question) {
+        // });
+        $questions = [];
 
         // 3
         $choices = [];

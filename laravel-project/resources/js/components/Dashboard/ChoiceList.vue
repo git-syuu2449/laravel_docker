@@ -24,7 +24,7 @@
 <script setup>
 
 import axios from 'axios'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const props = defineProps({
   choices: Array,
@@ -48,11 +48,11 @@ const doDelete = async (choice) => {
     await axios.delete(choice.delete_url)
     success.value = true
     alert('削除完了')
-    doSeaech();
+    doSearch();
   } catch (error) {
     if (error.response?.status === 404) {
       alert('削除済みです')
-      doSeaech();
+      doSearch();
     } else {
       alert('削除に失敗しました')
       console.error(error)
@@ -62,9 +62,8 @@ const doDelete = async (choice) => {
 }
 
 // 一覧をリフレッシュ
-const doSeaech = async () => {
+const doSearch = async () => {
   success.value = false
-  console.log(props.getUrl)
   try {
     await axios.get(props.getUrl)
     .then(res => {
@@ -78,9 +77,9 @@ const doSeaech = async () => {
 }
 
 // 一覧表示時に取得
-window:onload = function() {  
-  doSeaech();
-}
+onMounted(() => {
+  doSearch()
+})
 
 
 </script>

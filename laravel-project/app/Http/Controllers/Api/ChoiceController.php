@@ -15,20 +15,9 @@ use function PHPUnit\Framework\isNull;
 
 class ChoiceController extends Controller
 {
-    public function index(int $question_id = null){
-
-        $choices = Choice::query();
-        
-        //　ユーザー単位か質問単位かの切り分け
-        if ($question_id !== null){
-            $choices = Choice::query()->questionId($question_id)->get();
-        } else {
-            $choices = Choice::query()->userId(Auth::id())->get();
-        }
-
-        $choices->each(function ($choice) {
-            $choice['delete_url'] = $choice->delete_url;
-        });
+    public function index(int $question_id)
+    {
+        $choices = Choice::query()->questionId($question_id)->get();
 
         return response()->json([
             'status' => true,
@@ -44,7 +33,6 @@ class ChoiceController extends Controller
     {
         try
         {
-
             $choice = Choice::where([
                 'id' => $choice_id,
                 'user_id' => Auth::id(),

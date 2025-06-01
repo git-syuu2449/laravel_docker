@@ -8,6 +8,9 @@ use App\Enums\Role;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ChoiceController;
 
+use App\Http\Controllers\Api\Dashboard\QuestionController as DashboardQuestionController;
+use App\Http\Controllers\Api\Dashboard\ChoiceController as DashboardChoiceController;
+
 // 自動でprefixにapi/が付与
 
 Route::get('/user', function (Request $request) {
@@ -50,6 +53,25 @@ Route::controller(ChoiceController::class)
 ->group(function () {
     Route::get('/', 'index')->name('index');
 });
+
+//　ダッシュボード
+// dashboard/questions
+Route::controller(DashboardQuestionController::class)
+    ->prefix('dashboard/questions')
+    ->as('api.dashboard.questions.')
+    ->middleware(['web', 'auth:sanctum', 'role:'.Role::User->value])
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
+
+// dashboard/choices
+Route::controller(DashboardChoiceController::class)
+    ->prefix('dashboard/choices')
+    ->as('api.dashboard.choices.')
+    ->middleware(['web', 'auth:sanctum', 'role:'.Role::User->value])
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
 
 
 // セッションチェック
