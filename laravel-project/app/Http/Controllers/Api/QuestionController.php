@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use App\Http\Requests\SearchQuestionRequest;
 use App\Services\QuestionSearchService;
+use App\Services\QuestionService;
 
 class QuestionController extends Controller
 {
@@ -34,17 +35,14 @@ class QuestionController extends Controller
 
     /**
      * 質問削除
+     * 子テーブルの削除、画像削除も合わせて行う。
      */
-    public function destroy($question_id)
+    public function destroy($id, QuestionService $service)
     {
+        // トランザクション開始
         try
         {
-            $choice = Question::where([
-                'id' => $question_id,
-                'user_id' => Auth::id(),
-            ])->firstOrFail();
-
-            $choice->delete();
+            $service->deleteWithImage($id);
 
             return response()->json(['message' => '削除に成功しました'], 200);
 

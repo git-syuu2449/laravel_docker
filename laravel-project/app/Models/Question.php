@@ -30,6 +30,25 @@ class Question extends Model
     protected $fillable = ['user_id', 'title', 'body', 'pub_date'];
 
     /**
+     * bootオーバーライド
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        // 削除実行時の動作に子を削除する機能を追加
+        static::deleting(function ($question) {
+            // 子要素を一括削除
+            // リレーションで削除
+            // 評価
+            $question->choices()->delete();
+            // 質問画像
+            $question->questionImages()->delete();
+        });
+    }
+
+
+    /**
      * 評価可能かのプロパティ
      * @var bool
      */
@@ -95,6 +114,17 @@ class Question extends Model
     public function getDeleteUrlAttribute()
     {
         return route('api.questions.destroy', [
+            'id' => $this->id,
+        ]);
+    }
+
+    /**
+     * 質問詳細Url
+     * @return string
+     */
+    public function getQuestionShowUrlAttribute()
+    {
+        return route('questions.show', [
             'id' => $this->id,
         ]);
     }

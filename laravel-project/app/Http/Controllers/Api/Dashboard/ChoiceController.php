@@ -21,6 +21,7 @@ class ChoiceController extends Controller
 
         $choices->each(function (Choice $choice) {
             $choice['delete_url'] = $choice->delete_url;
+            $choice['question_show_url'] = $choice->question_show_url;
         });
 
         return response()->json([

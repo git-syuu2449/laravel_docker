@@ -1,44 +1,68 @@
 <template>
-    
+  <div>
     <h4 class="text-xl font-semibold text-gray-800 mb-4">あなたの投稿</h4>
-    
+
     <template v-if="questions.length === 0">
       <p class="text-gray-500">投稿はありません。</p>
     </template>
-    <template v-else>
-        <!-- スクロール表示 -->
-        <ul class="overflow-scroll divide-y-4 divide-gray-200 bg-white shadow-md rounded-md">
-            <template v-for="question in questions" :key="question.id">
-                <li class="p-4 hover:bg-gray-50 transition">
 
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-lg font-semibold text-gray-800">{{ question.title }}</h3>
-                        <span class="text-sm text-gray-500 px-2">{{ question.pub_date }}</span>
-                    </div>
-                    <p class="text-gray-700 whitespace-pre-line mb-2">
-                        {{ question.body }}
-                    </p>
-                    
-                    <template v-if="question.choices.length === 0">
-                        <p class="text-gray-500">評価はありません。</p>
-                    </template>
-                    
-                    <template v-else>
-                        <h5 class="text-xl font-semibold text-gray-800 mb-4">質問に対する評価</h5>
-                        <ul class="overflow-scroll divide-y-4 divide-gray-200 bg-white shadow-md rounded-md">
-                            <li v-for="choice in question.choices" :key="choice.id" class="p-4 hover:bg-gray-50 transition">
-                                {{ choice.updated_at }}
-                                {{ choice.choice_text }}
-                                {{ choice.votes }}
-                            </li>
-                        </ul>
-                    </template>
-                    <!-- 削除処理 -->
-                    <button @click="() => doDelete(question)">削除</button>
+    <template v-else>
+      <!-- 質問一覧全体に高さを設定してスクロール -->
+      <ul class="overflow-y-auto max-h-[40vh] space-y-4 pr-2">
+        <li
+          v-for="question in questions"
+          :key="question.id"
+          class="bg-white border border-gray-200 rounded-lg shadow p-4 transition hover:shadow-lg"
+        >
+          <!-- 質問のヘッダー -->
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-lg font-semibold text-gray-800">{{ question.title }}</h3>
+            <span class="text-sm text-gray-500">{{ question.pub_date }}</span>
+          </div>
+
+          <!-- 質問本文 -->
+          <p class="text-gray-700 whitespace-pre-line mb-4">{{ question.body }}</p>
+
+          <!-- 評価一覧アコーディオン -->
+          <div v-if="question.choices.length > 0">
+            <button
+              @click="toggleAccordion(question.id)"
+              class="text-blue-600 text-sm font-medium underline mb-2"
+            >
+              {{ opened.includes(question.id) ? '評価を隠す' : '評価を見る' }}
+            </button>
+
+            <transition name="fade">
+              <ul
+                v-show="opened.includes(question.id)"
+                class="overflow-y-auto max-h-48 space-y-2 bg-gray-200 rounded p-2"
+              >
+                <li
+                  v-for="choice in question.choices"
+                  :key="choice.id"
+                  class="bg-green-100 border rounded shadow-sm p-2 text-sm"
+                >
+                  <div class="text-gray-600">{{ choice.updated_at }}</div>
+                  <div class="font-semibold text-gray-800">{{ choice.choice_text }}</div>
+                  <div class="text-xs text-gray-500">評価数: {{ choice.votes }}</div>
                 </li>
-            </template>
-        </ul>
+              </ul>
+            </transition>
+          </div>
+
+          <div v-else class="text-gray-500 text-sm">評価はありません。</div>
+
+          <!-- 削除ボタン -->
+          <button
+            @click="() => doDelete(question)"
+            class="mt-4 text-red-600 text-sm hover:underline"
+          >
+            削除
+          </button>
+        </li>
+      </ul>
     </template>
+  </div>
 </template>
 
 
@@ -55,6 +79,18 @@ const props = defineProps({
 const questions = ref([...props.questions])
 // 結果
 const success = ref(false)
+
+// アコーディオン開閉
+const opened = ref([])
+
+const toggleAccordion = (id) => {
+  if (opened.value.includes(id)) {
+    opened.value = opened.value.filter((i) => i !== id)
+  } else {
+    opened.value.push(id)
+  }
+}
+
 
 // 削除押下
 const doDelete = async (question) => {
@@ -102,3 +138,14 @@ onMounted(() => {
 })
 
 </script>
+
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: all 0.3s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+</style>

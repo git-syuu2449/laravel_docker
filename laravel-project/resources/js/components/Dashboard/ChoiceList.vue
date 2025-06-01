@@ -1,23 +1,51 @@
 <template>
+  <div>
+    <h4 class="text-xl font-semibold text-gray-800 mb-4">あなたの評価</h4>
 
-  <h4 class="text-xl font-semibold text-gray-800 mb-4">あなたの評価</h4>
     <template v-if="choices.length === 0">
       <p class="text-gray-500">評価はありません。</p>
     </template>
+
     <template v-else>
-      <ul class="divide-y divide-gray-200 bg-gray-50 rounded-md shadow-sm">
-          <li v-for="choice in choices" :key="choice.id"  class="p-4">
-              <div class="flex justify-between items-center mb-1 text-sm text-gray-500">
-              <span>更新日時: {{ choice.updated_at }}</span>
-              <span class="text-blue-600 font-medium">得点: {{ choice.votes }}</span>
-              </div>
-              <p class="text-gray-800">{{ choice.choice_text }}</p>
-              <!-- 削除処理 -->
-              <button @click="() => doDelete(choice)">削除</button>
-          </li>
+      <!-- 評価一覧にスクロール制限をかけて表示 -->
+      <ul class="overflow-y-auto max-h-[40vh] space-y-4 pr-2">
+        <li
+          v-for="choice in choices"
+          :key="choice.id"
+          class="bg-white border border-gray-200 rounded-lg shadow p-4 transition hover:shadow-lg"
+        >
+            <!-- 詳細ボタン -->
+            <!-- <button
+              @click="() => doShow(choice)"
+              class="text-blue-600 text-sm hover:underline"
+              >
+              投稿詳細を見る
+            </button> -->
+            <!-- 動的にバインドが必要 -->
+            <a 
+              v-bind:href="choice.question_show_url"
+              target="_blank"
+              class="text-blue-600 text-sm hover:underline"
+            >投稿詳細を見る</a>
+
+          <div class="flex justify-between items-center mb-2 text-sm text-gray-500">
+            <span>更新日時: {{ choice.updated_at }}</span>
+            <span class="text-blue-600 font-medium">得点: {{ choice.votes }}</span>
+          </div>
+          <p class="text-gray-800 text-sm mb-2">{{ choice.choice_text }}</p>
+
+          <!-- 削除ボタン -->
+          <button
+            @click="() => doDelete(choice)"
+            class="text-red-600 text-sm hover:underline"
+          >
+            削除
+          </button>
+
+        </li>
       </ul>
     </template>
-
+  </div>
 </template>
 
 
@@ -80,6 +108,11 @@ const doSearch = async () => {
 onMounted(() => {
   doSearch()
 })
+
+// 詳細押下
+const doShow = (choice) => {
+  
+}
 
 
 </script>

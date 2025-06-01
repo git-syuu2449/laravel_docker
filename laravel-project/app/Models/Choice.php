@@ -87,4 +87,15 @@ class Choice extends Model
         ]);
     }
 
+    /**
+     * 質問詳細Url
+     * @return string
+     */
+    public function getQuestionShowUrlAttribute()
+    {
+        return route('questions.show', [
+            'id' => $this->question_id,
+        ]);
+    }
+
 }
