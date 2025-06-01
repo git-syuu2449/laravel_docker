@@ -8,12 +8,25 @@
 
 ## 主な機能
 
+- 質問の検索・一覧表示（Vueによるフィルタ）
 - ユーザーによる質問投稿（画像付き）
 - 質問への回答・結果の表示
-- 質問の検索・一覧表示（Vueによるフィルタ）
 - 質問・選択肢・画像の削除
 - Laravel Breezeによる認証機能
 - APIによるフロント・バックエンド分離
+
+## ER図
+
+<details>
+
+<summary><font color="Red">キャプチャを表示</font></summary>
+
+![ER図(自前実装したテーブル)](../docs/images/er2.png)
+
+自前実装したテーブルのみピックアップ
+
+</details>
+
 
 ## 画面遷移図
 
@@ -21,7 +34,7 @@
 
 <summary><font color="Red">キャプチャを表示</font></summary>
 
-![画面遷移図](../docs/images/tran.png)
+![Laravelポートフォリオの画面遷移図（API補助ラベル付き）](../docs/images/tran.png)
 
 </details>
 
@@ -137,17 +150,8 @@
 
 ### インフラ・その他
 - Docker / Docker Compose
-- Nginx + PHP-FPM構成
 - MySQL（8.x系）
 - .envによる環境分離
-
-## 設計・工夫ポイント
-
-- 削除処理時に `boot()` でリレーションを自動削除（Question→Choice/QuestionImage）
-- トランザクション + 行ロックによる一貫性担保
-- Serviceクラスへの責務分離でControllerを薄く保守性の高い構造に
-- Laravel 11の新しい例外ハンドリング構文（`Application::withExceptions()`）に対応
-- バリデーション・エラーハンドリングも統一化
 
 ## 今後の機能追加予定
 
