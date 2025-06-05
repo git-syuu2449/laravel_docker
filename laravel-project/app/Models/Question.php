@@ -44,6 +44,8 @@ class Question extends Model
             $question->choices()->delete();
             // 質問画像
             $question->questionImages()->delete();
+            //　ランキング
+            $question->rankings()->delete();
         });
     }
 
@@ -55,7 +57,7 @@ class Question extends Model
     public bool $can_be_evaluated = false;
 
     /**
-     * Summary of choices
+     * 選択（評価）
      * @return \Illuminate\Database\Eloquent\Relations\HasMany<Choice, Question>
      */
     public function choices()
@@ -63,14 +65,31 @@ class Question extends Model
         return $this->hasMany(Choice::class);
     }
 
+    /**
+     * 質問画像
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<QuestionImage, Question>
+     */
     public function questionImages()
     {
         return $this->hasMany(QuestionImage::class);
     }
 
+    /**
+     * ユーザー
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, Question>
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * ランキング
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Ranking, Question>
+     */
+    public function rankings()
+    {
+        return $this->hasMany(Ranking::class);
     }
 
     /**
