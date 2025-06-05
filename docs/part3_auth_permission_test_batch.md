@@ -162,6 +162,21 @@ php artisan make:command AggregateVotes
 $schedule->command('app:aggregate-votes')->daily();
 ```
 
+### 実行方法
+
+`php artisan schedule:run`  
+現在実行可能なタスクの実行を行う
+
+`php artisan schedule:test`  
+スケジュールされたコマンドを実行する。
+
+`php artisan schedule:work`  
+1分ごとにschedule:runコマンドを実行する。  
+開発時の検証用
+
+### 直接コマンドから叩く場合  
+php artisan app:{タスク名}
+
 ### cron設定
 
 ```cron
