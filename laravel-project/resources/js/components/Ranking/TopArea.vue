@@ -1,14 +1,18 @@
 <!-- ランキングの親コンポーネント -->
 <template>
-  <top-tab
-  :tabs="props.types"
-  :selectType="selectType"
-  @selectedTab="handleUpdate"
-  />
+  <div class="w-full">
+    <top-tab
+    :tabs="props.types"
+    :selectType="selectType"
+    @selectedTab="handleUpdate"
+    />
 
-  <top-list
-  :rankings="rankings"
-  />
+    <top-list
+    :rankings="rankings"
+    :showBaseUrl="props.showBaseUrl"
+    />
+  </div>
+
 </template>
 
 <script setup lang="ts">
@@ -25,6 +29,7 @@ const props = defineProps({
   types: Array,
   getUrl: String,
   defaultType: String,
+  showBaseUrl: String,
 })
 
 // API取得後の値
@@ -47,11 +52,11 @@ const doSearch = async () => {
     })
     .then(res => {
       // ランキングを更新
-      console.log(res.data.rankings)
       rankings.value = res.data.rankings
     })
     success.value = true
   } catch (error) {
+    alert('ランキングの取得に失敗しました。')
     console.error(error)
   }
 }
@@ -63,7 +68,6 @@ onMounted(() => {
 
 // タブ選択時
 const handleUpdate = (tab) => {
-  console.log(tab)
   selectType.value = tab
   doSearch()
 }

@@ -17,6 +17,7 @@
       v-bind:get-url="'{{ route('api.rankings.index') }}'"
       v-bind:types = '@json($types)'
       v-bind:default-type="'{{ $default_type }}'"
+      v-bind:show-base-url="'{{ rtrim(route('questions.show', ['id' => 1]),1) }}'"
     ></ranking_top_area>
   </div>
 </div>
