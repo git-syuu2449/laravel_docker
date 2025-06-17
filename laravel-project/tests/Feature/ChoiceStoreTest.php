@@ -9,6 +9,7 @@ use Tests\TestCase;
 
 use App\Models\Question;
 use App\Models\Choice;
+use App\Models\User;
 
 class ChoiceStoreTest extends TestCase
 {
@@ -25,10 +26,12 @@ class ChoiceStoreTest extends TestCase
     {
         // 一対多構成の為、一のデータを作成
         $question = Question::factory()->create();
+        $user = User::factory()->create();
 
         $target_url = route('choices.store', $question->id);
         $test_data = [
             "question_id" => $question->id,
+            "user_id" => $user->id,
             "choice_text" => $this->faker->realText(200),
             "votes" => 2,
         ];

@@ -148,6 +148,20 @@ DBの値に対しての検証
 
 fackerを利用するとそれっぽいデータが作られる。
 
+`RefreshDatabase` を使用するとデータのクリアが行われる。
+
+`.env.testing` を参照して、テスト用のDBで作業する。
+
+```bash
+# テスト用のDBにマイグレーションを実行する
+# config/database.phpに設定を追加　要キャッシュクリア
+php artisan config:clear && php artisan cache:clear && php artisan route:clear
+php artisan migrate:fresh --database=mysql_test
+# テスト実施
+php artisan test --env=testing
+# 再度キャッシュクリア
+```
+
 ---
 
 ## バッチ処理（Artisan Command + スケジューラ）
