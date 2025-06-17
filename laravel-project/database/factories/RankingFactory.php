@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\RankingType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,13 @@ class RankingFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'type' => RankingType::DAILY,
+            'base_date' => today(),
+            'start_at' => now()->startOfDay(),
+            'end_at' => now()->endOfDay(),
+            'count' => 0,
+            'total' => 0,
+            'average' => 0,
         ];
     }
 }
