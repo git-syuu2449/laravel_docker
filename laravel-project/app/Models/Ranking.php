@@ -6,12 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Models\Scopes\RankingScopes;
+
 class Ranking extends Model
 {
     /** @use HasFactory<\Database\Factories\RankingFactory> */
     use HasFactory;
     use SoftDeletes;
 
+    // スコープ
+    use RankingScopes;
 
     /**
      * 入力可能なカラム
@@ -28,4 +32,6 @@ class Ranking extends Model
     {
         return $this->belongsTo(Question::class);
     }
+
+
 }

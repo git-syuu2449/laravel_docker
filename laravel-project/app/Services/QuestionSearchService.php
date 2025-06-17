@@ -77,7 +77,7 @@ class QuestionSearchService
             $query->toDateTime($to);
         }
 
-        $questions = $query->get();
+        $questions = $query->orderByDesc('pub_date')->get();
 
         // 評価可能かを判定してセット
         $questions->each(function ($question) {

@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\ChoiceController;
 
 use App\Http\Controllers\Api\Dashboard\QuestionController as DashboardQuestionController;
 use App\Http\Controllers\Api\Dashboard\ChoiceController as DashboardChoiceController;
+use App\Http\Controllers\Api\RankingController as ApiRankingController;
+use App\Http\Controllers\RankingController;
 
 // 自動でprefixにapi/が付与
 
@@ -68,6 +70,15 @@ Route::controller(DashboardQuestionController::class)
 Route::controller(DashboardChoiceController::class)
     ->prefix('dashboard/choices')
     ->as('api.dashboard.choices.')
+    ->middleware(['web', 'auth:sanctum', 'role:'.Role::User->value])
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
+
+// ランキング
+Route::controller(ApiRankingController::class)
+    ->prefix('rankings')
+    ->as('api.rankings.')
     ->middleware(['web', 'auth:sanctum', 'role:'.Role::User->value])
     ->group(function () {
         Route::get('/', 'index')->name('index');

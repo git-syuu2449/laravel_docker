@@ -37,6 +37,18 @@ enum RankingType: string
         };
     }
 
+    /**
+     * ラベルとバリューの配列を返却する
+     * @return array
+     */
+    public static function getLabelsValues(): array 
+    {
+        return collect(self::cases())->map(fn ($type) => [
+            'label' => $type->label(),
+            'value' => $type->value,
+        ])->toArray();
+    }
+
 
     /**
      * 起点となる日から開始日時、終了日時を作成して返却
