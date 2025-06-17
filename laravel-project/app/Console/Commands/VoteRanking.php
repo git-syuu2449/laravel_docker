@@ -61,7 +61,7 @@ class VoteRanking extends Command
                     ->where('created_at', '<=', $end_at);
             });
             // dd($query->toSql(), $query->getBindings()); // debug
-            dd(preg_replace_array('/\?/', $query->getBindings(), $query->toSql())); // debug バインドパラメータ込みで確認
+            // dd(preg_replace_array('/\?/', $query->getBindings(), $query->toSql())); // debug バインドパラメータ込みで確認
             $questions = $query->get();
             $questions->each(function($question) use($type, $base_date, $start_at, $end_at)
             {

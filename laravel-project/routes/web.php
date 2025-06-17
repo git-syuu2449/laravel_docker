@@ -11,6 +11,7 @@ use App\Http\Controllers\DashboardController;
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboradController;
 use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;
+use App\Http\Controllers\RankingController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // ログイン関連
@@ -63,6 +64,14 @@ Route::controller(QuestionController::class)
 Route::post(uri: '/questions/{id}/choices', action: [ChoiceController::class, 'store'])->name('choices.store')
 ->middleware(['auth', 'verified', 'role:'.Role::User->value]);
 
+// ランキング
+Route::controller(RankingController::class)
+->prefix('rankings')
+->as('rankings.')
+->middleware(['auth', 'verified', 'role:'.Role::User->value])
+->group(function () {
+    Route::get('/', 'index')->name('index');
+});
 
 
 // 管理画面

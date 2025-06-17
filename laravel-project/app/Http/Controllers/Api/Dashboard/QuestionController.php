@@ -17,7 +17,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::with(['choices'])->userId(Auth::id())->get();
+        $questions = Question::with(['choices'])->userId(Auth::id())->orderByDesc('pub_date')->get();
 
         $questions->each(function (Question $question) {
             $question['delete_url'] = $question->delete_url;
