@@ -14,8 +14,8 @@ class RankingController extends Controller
      */
     public function index()
     {
-        // $types = RankingType::cases();
-        $types = array_map(fn($case) => $case->value, RankingType::cases());
+        $types = RankingType::getLabelsValues();
+
         // 検索に使用する初期検索タイプ
         $default_type = RankingType::DAILY->value;
         

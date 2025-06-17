@@ -11,7 +11,6 @@
 @section('title', 'ランキング')
 
 @section('content')
-{{  $default_type }}
   <div id="app-vue">
     <ranking_top_area
       v-bind:get-url="'{{ route('api.rankings.index') }}'"

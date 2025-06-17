@@ -2,16 +2,16 @@
     <div class="flex space-x-2 border-b mb-4">
       <button
         v-for="tab in props.tabs"
-        :key="tab"
-        @click="() => selectedTab(tab)"
+        :key="tab.value"
+        @click="() => selectedTab(tab.value)"
         :class="[
           'px-4 py-2 text-sm font-medium border-b-2',
-          props.selectType === tab
+          props.selectType === tab.value
             ? 'border-blue-500 text-blue-600'
             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
         ]"
       >
-        {{ tab }}
+        {{ tab.label }}
       </button>
     </div>
 </template>
