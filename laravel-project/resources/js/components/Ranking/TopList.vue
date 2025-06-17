@@ -11,12 +11,10 @@
         :key="item.id"
         class="bg-white rounded-2xl shadow p-4"
       >
-        <a :href="showBaseUrl + item.question.id">
+        <a :href="showBaseUrl + item.question_id">
+            <img :src="item.question_iamge" class="w-16 h-16 object-cover rounded mr-4" />
             <div class="text-lg font-semibold text-gray-800">
-            {{ item.question.title }}
-            </div>
-            <div class="mt-1 text-sm text-gray-500">
-            {{ item.description }}
+            {{ item.question_title }}
             </div>
             <div class="mt-2 text-xs text-gray-400">
             トータルスコア: {{ item.total }}
@@ -29,6 +27,10 @@
             </div>
         </a>
       </div>
+        <br />
+        <div v-if="rankings.length > 0">
+            <p class="text-gray-500">{{rankings[0].base_date}}時点のランキング</p>
+        </div>
     </div>
 </template>
 

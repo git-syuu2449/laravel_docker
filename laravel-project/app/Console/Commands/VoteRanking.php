@@ -39,29 +39,19 @@ class VoteRanking extends Command
             // Log::debug("引数",['param' => $this->argument('type'),'opt'=> $this->argument('date')]);
 
             // typeの一致がない場合はエラー
-            $type = RankingType::from($this->argument('type'));
+            $type = RankingType::from($this->argument('type')); //?? RankingType::DAILY;
             // 日付の形式が異常な場合はエラー
             $base_date = Carbon::parse($this->argument('date'));
 
             // typeで日付を生成
             [$start_at, $end_at] = $type->getDateRange($base_date);
 
-            // 対象のレコードを取得 DB上でサマリする場合は変更
-
-            //　以下の書き方はすべての choices が取得される
-            // $query = Question::query()->with('choices')
-            //     ->whereHas('choices', function($qu) use($start_at, $end_at){
-            //         $qu->where('created_at', '>=', $start_at)
-            //         ->where('created_at', '<=', $end_at);
-            //     });
-            // 以下の書き方は条件の choices が取得される
             $query = Question::withWhereHas('choices', function ($qu) use($start_at, $end_at){
                 // todo 内部でもスコープ使えるので対応。
                 $qu->where('created_at', '>=', $start_at)
                     ->where('created_at', '<=', $end_at);
             });
-            // dd($query->toSql(), $query->getBindings()); // debug
-            // dd(preg_replace_array('/\?/', $query->getBindings(), $query->toSql())); // debug バインドパラメータ込みで確認
+
             $questions = $query->get();
             $questions->each(function($question) use($type, $base_date, $start_at, $end_at)
             {
@@ -95,7 +85,6 @@ class VoteRanking extends Command
         }
         catch (\Throwable $e)
         {
-            // @todo 例外の種類によって処理をわける場合は分離
             report($e);
             Log::channel('critical_errors')->error($e);
             $this->error('ランキング集計バッチ異常終了');

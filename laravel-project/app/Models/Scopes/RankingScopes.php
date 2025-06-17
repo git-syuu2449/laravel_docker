@@ -79,4 +79,13 @@ trait RankingScopes
     {
         return $query->with('question');
     }
+
+    /**
+     * withQuestion
+     * @param mixed $query
+     */
+    public function scopeWithQuestionWithQuestionImages($query)
+    {
+        return $query->with('question.questionImages');
+    }
 }

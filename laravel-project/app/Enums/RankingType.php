@@ -39,7 +39,7 @@ enum RankingType: string
 
     /**
      * ラベルとバリューの配列を返却する
-     * @return \Illuminate\Support\Collection<mixed, array{label: string, value: string>}
+     * @return array
      */
     public static function getLabelsValues(): array 
     {

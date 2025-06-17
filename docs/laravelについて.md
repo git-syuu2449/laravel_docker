@@ -511,3 +511,10 @@ bash(docker)
 ## サービスコンテナ
 あとで
 
+
+
+
+# ログメモ
+
+// dd($query->toSql(), $query->getBindings()); // debug
+// dd(preg_replace_array('/\?/', $query->getBindings(), $query->toSql())); // debug バインドパラメータ込みで確認
