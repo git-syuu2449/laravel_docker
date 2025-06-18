@@ -27,7 +27,7 @@ class ApiQuestionTest extends TestCase
     {
         // 必要データの作成
         $user = User::factory()->create();
-        $question = Question::factory()->create();
+        $question = Question::factory(['user_id' => $user->id])->create();
 
         $target_url = route('api.questions.index');
 
@@ -49,7 +49,7 @@ class ApiQuestionTest extends TestCase
       {
           // 必要データの作成
           $user = User::factory()->create();
-          $question = Question::factory()->create();
+          $question = Question::factory(['user_id' => $user->id])->create();
   
           $target_url = route('api.questions.index');
   
@@ -73,7 +73,7 @@ class ApiQuestionTest extends TestCase
           $user = User::factory()->create([
             'role' => Role::Guest // 権限のないユーザー
           ]);
-          $question = Question::factory()->create();
+          $question = Question::factory(['user_id' => $user->id])->create();
   
           $target_url = route('api.questions.index');
   

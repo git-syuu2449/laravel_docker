@@ -211,6 +211,8 @@ PMA_PORT=8080
 
 [Part9: ポリシー関連](docs/part8_policy.md)
 
+[Part10: テスト](docs/part10_test.md)
+
 [PartX: その他](docs/part_x_other.md)
 
 [開発環境等](docs/開発環境.md)
