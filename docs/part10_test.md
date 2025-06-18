@@ -46,6 +46,48 @@ php artisan test --filter=can_hoge_hoge(メソッド名) # 特定のテストメ
 ```
 
 
+## 認証が必要なテストケース
+
+認証後に利用する機能では、未ログイン状態だとテストケースが通らない。  
+Laravel標準のHTTPテストの `actingAs` メソッドを利用してログイン状態を作る。
+
+```php
+$user = User::factory()->create();
+$this->actingAs($user)->...
+```
+
+## 検証内容
+
+Laravel標準で用意されている検証方法でよく使用されるものを抜粋
+
+- assertStatus
+ステータスコードの検証
+
+- assertSessionHasErrors
+エラーが発生することの検証
+
+- assertDatabaseHas
+DBの値に対しての検証
+
+参考：https://laravel.com/docs/11.x/
+
+## テストデータ  
+
+### Factory
+
+他seeder項等にも関連するが、テストデータを作成する際に*Factory*を使用する。  
+
+- 作成方法は以下  
+`php artisan make:factory [ファクトリ名] --model=[対象のモデル名]`
+
+- 利用方法例は以下
+`Question::factory()->create();`
+
+
+
+---
+
+
 ## ブラウザテスト
 
 - Laravel Dusk 
@@ -97,45 +139,70 @@ php artisan dusk:install
 
 tests/Browser ディレクトリと、DuskTestCase.php が作成される。
 
+```bash
+# apt-getで必要なパッケージを入れる。
+# dusk_init.shを参照。
 
-
-
-## 認証が必要なテストケース
-
-認証後に利用する機能では、未ログイン状態だとテストケースが通らない。  
-Laravel標準のHTTPテストの `actingAs` メソッドを利用してログイン状態を作る。
-
-```php
-$user = User::factory()->create();
-$this->actingAs($user)->...
 ```
 
-## 検証内容
+### 設定
 
-Laravel標準で用意されている検証方法でよく使用されるものを抜粋
+```bash
+vi .env.dusk.local
+```
 
-- assertStatus
-ステータスコードの検証
+```php
+# .env.dusk.local設定例
+APP_URL=http://nginx  # nginxコンテナ名
+DB_HOST=db            # dbコンテナ名
+DB_PORT=3306
+DB_DATABASE=laravel_db
+DB_USERNAME=root
+DB_PASSWORD=password
 
-- assertSessionHasErrors
-エラーが発生することの検証
+# DuskがリモートSelenium使う設定
+DUSK_DRIVER=remote
+```
 
-- assertDatabaseHas
-DBの値に対しての検証
+.env.dusk.localについて
 
-参考：https://laravel.com/docs/11.x/
+.env.dusk.local はartisan dusk起動で自動で読み込まれる。  
+個別に指定する場合は以下  
 
-## テストデータ  
+```bash
+# .env.dusk.stagingを作った場合
+php artisan dusk --env=staging
+```
 
-### Factory
 
-他seeder項等にも関連するが、テストデータを作成する際に*Factory*を使用する。  
+```php
+# DuskTestCase.php
+# 以下を削除 これはchrome-driverを同一環境で動かす前提で、コンテナを分ける場合は問題になる。
+# static::startChromeDriver(['--port=9515']);
 
-- 作成方法は以下  
-`php artisan make:factory [ファクトリ名] --model=[対象のモデル名]`
+# 以下をオプションに追加
+'--no-sandbox',
+'--disable-gpu',
+'--headless=new',
 
-- 利用方法例は以下
-`Question::factory()->create();`
+# urlをセレニウムのコンテナ名にする
+'http://selenium:4444/wd/hub',
+
+```
+
+
+### 実行
+
+```bash
+# 全テストの実行
+php artisan dusk
+# 特定のテストの実行
+php artisan dusk tests/Browser/ExampleTest.php
+# 特定のメソッドのみ実行
+php artisan dusk --filter testBasicExample
+```
+
+
 
 #### 補足
 
@@ -154,3 +221,50 @@ php artisan migrate:fresh --database=mysql_test
 php artisan test --env=testing
 # 再度キャッシュクリア
 ```
+
+```php
+# config/database.php
+# --databaseで指定するmysql_testを例にあげる
+
+// テスト用(使用しているドライバから複製する)
+'mysql_test' => [
+    'driver' => 'mysql',
+    'url' => env('DB_URL'),
+    'host' => env('DB_HOST', '127.0.0.1'),
+    'port' => env('DB_PORT', '3306'),
+    'database' => env('DB_DATABASE_TEST', 'test_db'),
+    'username' => env('DB_USERNAME_TEST', 'root'),
+    'password' => env('DB_PASSWORD_TEST', 'password'),
+    'unix_socket' => env('DB_SOCKET', ''),
+    'charset' => env('DB_CHARSET', 'utf8mb4'),
+    'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+    'prefix' => '',
+    'prefix_indexes' => true,
+    'strict' => true,
+    'engine' => null,
+    'options' => extension_loaded('pdo_mysql') ? array_filter([
+        PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+    ]) : [],
+],
+
+```
+
+```php
+# .envに追加
+
+# db設定(テスト)
+DB_DATABASE_TEST=test_db
+DB_USERNAME_TEST=root
+DB_PASSWORD_TEST=password
+
+```
+
+
+- Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+/etc/init.d/dbus start
+
+
+
+> 参考
+
+https://dexall.co.jp/articles/?p=2559
