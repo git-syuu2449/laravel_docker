@@ -24,6 +24,8 @@ class LoginTest extends DuskTestCase
     public function testLoginVisit(): void
     {
         $this->browse(function (Browser $browser) {
+            $this->logoutWithPost($browser); // ログアウト
+            $browser->pause(500);
             $browser->visitRoute('login')
                     ->screenshot($this->getScreenShotPath('login_visit', 1))
                     ->assertSee('Email');
@@ -37,6 +39,8 @@ class LoginTest extends DuskTestCase
     public function testLoginError(): void
     {
         $this->browse(function (Browser $browser) {
+            $this->logoutWithPost($browser); // ログアウト
+            $browser->pause(500);
             $browser->visit('http://nginx/login')
                 ->pause(1500); // ページロードを待つ
 
@@ -74,6 +78,9 @@ class LoginTest extends DuskTestCase
     {
         $user = User::where('role', Role::Admin)->first();
         $this->browse(function (Browser $browser) use ($user) {
+            $this->logoutWithPost($browser); // ログアウト
+            $browser->pause(500);
+
             $browser->visitRoute('login')
                 ->waitFor('#email')
                 ->type('#email', 'test1@email.com')
@@ -84,8 +91,6 @@ class LoginTest extends DuskTestCase
                 ->waitForRoute('admin.dashboard') // パスが表示されるまで待つ
                 ->assertRouteIs('admin.dashboard') // 管理ユーザー初期画面
                 ->screenshot($this->getScreenShotPath('login_success_admin', 2));
-            
-            $browser->logout();
         });
     }
 
@@ -96,8 +101,9 @@ class LoginTest extends DuskTestCase
     {
         $user = User::where('role',Role::User)->first();
         $this->browse(function (Browser $browser) use ($user) {
+            $this->logoutWithPost($browser); // ログアウト
+            $browser->pause(500);
             $browser->visitRoute('login')
-                ->pause(15000)
                 ->waitFor('#email')
                 ->type('#email', 'test2@email.com')
                 ->waitFor('#password')
@@ -107,7 +113,6 @@ class LoginTest extends DuskTestCase
                 ->waitForRoute('dashboard')// パスが表示されるまで待つ
                 ->assertRouteIs('dashboard')// 一般ユーザー初期画面
                 ->screenshot($this->getScreenShotPath('login_success_user', 2));
-            $browser->logout();
         });
     }
 }

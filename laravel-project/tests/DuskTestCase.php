@@ -8,7 +8,7 @@ use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Log;
+use Laravel\Dusk\Browser;
 
 abstract class DuskTestCase extends BaseTestCase
 {
@@ -59,40 +59,46 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function tearDown(): void
     {
-        // まず親のtearDownを呼び出す（Duskはここでブラウザを閉じる処理などを行うはず）
-        parent::tearDown(); 
-
-        // ★追加: 各テスト後にブラウザのクッキーとローカルストレージをクリア
-        $this->browse(function ($browser) { // tearDownではBrowserインスタンスを直接使えないので、browse()で取得
-            try {
-                // クッキーをクリア
-                $browser->driver->manage()->deleteAllCookies();
-                // ローカルストレージをクリア (JavaScriptを実行して削除)
-                $browser->script('window.localStorage.clear();');
-                // セッションストレージをクリア
-                $browser->script('window.sessionStorage.clear();');
-                Log::info('Browser cookies, local storage, and session storage cleared.');
-            } catch (\Throwable $e) {
-                // エラーが発生してもテストが中断しないように
-                Log::error("Error clearing browser state: " . $e->getMessage());
-            }
-        });
-
-        // Laravelアプリケーション側のセッションとキャッシュをクリア (以前の修正を維持)
         try {
-            $sessionPath = storage_path('framework/sessions'); // あるいはハードコードパス
-            if (is_dir($sessionPath)) {
-                $items = glob($sessionPath . '/*');
-                foreach ($items as $item) {
-                    if (is_file($item)) {
-                        unlink($item);
-                    }
-                }
-            }
-            Artisan::call('cache:clear');
-            Log::info('Laravel session files and cache cleared.');
+            $this->browse(function (Browser $browser) {
+                $this->logoutWithPost($browser); // ログアウト
+            });
         } catch (\Throwable $e) {
-            Log::error("Error clearing Laravel session/cache: " . $e->getMessage());
+            // 念のため握りつぶす
         }
+
+        parent::tearDown();
+    }
+
+
+
+    /**
+     * ログアウトを強制的に行う
+     * @param \Laravel\Dusk\Browser $browser
+     * @return void
+     */
+    protected function logoutWithPost(Browser $browser, $target='/dashboard'): void
+    {
+        $browser->visit($target)
+        ->script('
+            const token = document.querySelector(\'meta[name="csrf-token"]\')?.content;
+            if (!token) {
+                console.error("CSRFトークンが取得できませんでした");
+                return;
+            }
+
+            const form = document.createElement("form");
+            form.method = "POST";
+            form.action = "/logout";
+
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "_token";
+            input.value = token;
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        ');
     }
 }
