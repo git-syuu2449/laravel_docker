@@ -18,6 +18,10 @@ RUN apt-get update && apt-get install -y \
     sudo \
     gnupg
 
+# wait-for-it.sh をコンテナ内にコピー
+# COPY ../../wait-for-it.sh /usr/local/bin/wait-for-it.sh
+# RUN chmod +x /usr/local/bin/wait-for-it.sh
+
 # PHP拡張モジュールのインストール
 RUN docker-php-ext-install zip pdo_mysql
 
