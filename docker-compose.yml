@@ -1,32 +1,4 @@
 services:
-  app:
-    container_name: app_laravel
-    build:
-      context: .
-      dockerfile: docker/php/Dockerfile
-      args:
-        UID: ${UID}
-        GID: ${GID}
-    user: "${UID}:${GID}" 
-    volumes:
-      - .:/var/www
-      - ~/.docker_bash_history:/appuser/.bash_history
-    # vote
-    ports:
-     - 5173:5173
-
-  nginx:
-    image: nginx
-    container_name: nginx
-    ports:
-      - "${APP_PORT}:80"
-    volumes:
-      - .:/var/www
-      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-    working_dir: /var/www
-    depends_on:
-      - app
-
   db:
     image: mysql:8.0.36
     container_name: db
@@ -41,27 +13,63 @@ services:
     ports:
       - "${MYSQL_PORT}:3306"
 
+  app:
+    container_name: app_laravel
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      args:
+        UID: ${UID}
+        GID: ${GID}
+    user: "${UID}:${GID}" 
+    volumes:
+      - .:/var/www
+      - ~/.docker_bash_history:/appuser/.bash_history
+      - ./wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
+    command: ["/usr/local/bin/wait-for-it.sh", "db:3306", "--", "php-fpm"]
+    depends_on:
+      - db
+    ports:
+      - 5173:5173
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    volumes:
+      - .:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
+    working_dir: /var/www
+    command: ["/usr/local/bin/wait-for-it.sh", "app:9000", "--", "nginx", "-g", "daemon off;"]
+    depends_on:
+      - app
+    ports:
+      - "${APP_PORT}:80"
+
   phpmyadmin:
     container_name: test_phpmyadmin
     image: phpmyadmin
     environment:
       PMA_USER: ${PMA_USER}
       PMA_PASSWORD: ${PMA_PASSWORD}
+    depends_on:
+      - db
     ports:
       - "${PMA_PORT}:80"
 
-
   selenium:
-    # image: selenium/standalone-chrome-debug
-    # image: selenium/hub:latest
-    image: selenium/standalone-chrome:latest
+    image: selenium/standalone-chrome-debug
+    container_name: selenium
     depends_on:
       - nginx
+    # command: ["/usr/local/bin/wait-for-it.sh", "nginx:80", "--", "sh", "-c", "google-chrome --version && tail -f /dev/null"]
+    command: ["/usr/local/bin/wait-for-it.sh", "nginx:80", "--", "/opt/bin/entry_point.sh"]
     ports:
       - 4444:4444
-      - 7900:7900  # VNCでブラウザ動作確認可
+      - 7900:7900
       - 5900:5900
     privileged: true
     volumes:
+      - ./wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
       - /dev/shm:/dev/shm
     shm_size: 2g
