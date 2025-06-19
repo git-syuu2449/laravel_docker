@@ -215,7 +215,9 @@ fackerを利用するとそれっぽいデータが作られる。
 ```bash
 # テスト用のDBにマイグレーションを実行する
 # config/database.phpに設定を追加　要キャッシュクリア
-php artisan config:clear && php artisan cache:clear && php artisan route:clear
+php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan view:clear
+# 以下は全部クリア
+php artisan optimize:clear
 php artisan migrate:fresh --database=mysql_test
 # テスト実施
 php artisan test --env=testing
@@ -268,3 +270,4 @@ DB_PASSWORD_TEST=password
 > 参考
 
 https://dexall.co.jp/articles/?p=2559
+https://qiita.com/yun-yzrh/items/3d995c83f0b58009c61f

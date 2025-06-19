@@ -52,11 +52,11 @@ services:
 
 
   selenium:
-    # image: selenium/standalone-chrome:latest
+    # image: selenium/standalone-chrome-debug
     # image: selenium/hub:latest
-    image: selenium/standalone-chrome-debug
+    image: selenium/standalone-chrome:latest
     depends_on:
-      - app
+      - nginx
     ports:
       - 4444:4444
       - 7900:7900  # VNCでブラウザ動作確認可
