@@ -153,15 +153,35 @@ vi .env.dusk.local
 
 ```php
 # .env.dusk.local設定例
+# -------------------
+# dusk起動に必要な最小構成
+APP_ENV=dusk.local
 APP_URL=http://nginx  # nginxコンテナ名
+# APP_URL=http://app  # appコンテナ名
 DB_HOST=db            # dbコンテナ名
 DB_PORT=3306
 DB_DATABASE=laravel_db
 DB_USERNAME=root
 DB_PASSWORD=password
 
+# SESSION_DOMAIN=null 
+SESSION_DOMAIN=null
+SESSION_DRIVER=file
+SESSION_SECURE_COOKIE=false
+
 # DuskがリモートSelenium使う設定
 DUSK_DRIVER=remote
+
+VITE_APP_NAME=vite
+# 開発時のviteサーバ
+VITE_DEV_SERVER_URL=http://app:5173
+FRONTEND_URL=http://app:3000
+
+# sanctum
+# SANCTUM_STATEFUL_DOMAINS=nginx:8000,nginx:3000,nginx
+SANCTUM_STATEFUL_DOMAINS="localhost,127.0.0.1,nginx"
+
+# ------------------
 ```
 
 .env.dusk.localについて
@@ -171,7 +191,7 @@ DUSK_DRIVER=remote
 
 ```bash
 # .env.dusk.stagingを作った場合
-php artisan dusk --env=staging
+php artisan dusk --env=dusk.staging
 ```
 
 
@@ -202,7 +222,21 @@ php artisan dusk tests/Browser/ExampleTest.php
 php artisan dusk --filter testBasicExample
 ```
 
+実行時にはviteを使うことはできない。  
+appをlocalhostで動かす場合、selenium側から解決することができないので、以下手順をとる。  
+public/hotが存在すると指定されたサーバーを参照しようとするため。
 
+1. npm run devを停止
+2. npm run build
+3. テストを実施
+
+他：dockerでseleniumに割り当てるイメージは新しいものを使用する。  
+image: selenium/standalone-chrome:latest
+
+
+browse() はクロージャごとにブラウザインスタンスを使い回す（ブラウザの新規起動ではない）
+
+→ 前のセッションを維持したまま次のクロージャが動く
 
 #### 補足
 
@@ -215,7 +249,9 @@ fackerを利用するとそれっぽいデータが作られる。
 ```bash
 # テスト用のDBにマイグレーションを実行する
 # config/database.phpに設定を追加　要キャッシュクリア
-php artisan config:clear && php artisan cache:clear && php artisan route:clear
+php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan view:clear
+# 以下は全部クリア
+php artisan optimize:clear
 php artisan migrate:fresh --database=mysql_test
 # テスト実施
 php artisan test --env=testing
@@ -268,3 +304,4 @@ DB_PASSWORD_TEST=password
 > 参考
 
 https://dexall.co.jp/articles/?p=2559
+https://qiita.com/yun-yzrh/items/3d995c83f0b58009c61f

@@ -13,6 +13,4 @@ apt-get update && apt-get install -y \
     fonts-liberation \
     xdg-utils \
     wget \
-    unzip \
-    iputils-ping \
-    net-tools # debug
+    unzip

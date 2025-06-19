@@ -25,14 +25,16 @@ const ignoreComponentList = [
 const ignoreCssList = [
     'resources/css/_template/**',
 ];
+
 // ... を使った配列のアンパック
 export default defineConfig({
     server: {
-        host: true,
-        // host: 'localhost',
-        // host: '0.0.0.0',
-        strictPort: true
-      },
+        host: '0.0.0.0',
+        port: 5173,
+        strictPort: true,
+        allowedHosts: ['app', 'nginx'], // 許可するコンテナ名
+    },
+    base: '/',
     resolve: {
         alias: {
             'vue': 'vue/dist/vue.esm-bundler.js',

@@ -75,7 +75,7 @@ Route::controller(RankingController::class)
 
 
 // 管理画面
-Route::get(uri: 'admin/',action:  [ AdminDashboradController::class, 'index'])
+Route::get(uri: 'admin/dashboard',action:  [ AdminDashboradController::class, 'index'])
 ->middleware(['auth', 'verified', 'role:' . Role::Admin->value])
 ->name('admin.dashboard');
 

@@ -1,6 +1,6 @@
 APP_NAME=Laravel
 APP_ENV=local
-APP_KEY=base64:/NvHFUMDNEj/CDUzOffLYICASBFC6rl4eGBMGXc+oRI=
+
 APP_DEBUG=true
 APP_TIMEZONE=UTC
 APP_URL=http://localhost
