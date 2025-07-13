@@ -22,11 +22,16 @@ RUN apt-get update && apt-get install -y \
 # COPY ../../wait-for-it.sh /usr/local/bin/wait-for-it.sh
 # RUN chmod +x /usr/local/bin/wait-for-it.sh
 
-# PHP拡張モジュールのインストール
-RUN docker-php-ext-install zip pdo_mysql
+# GD関連で使用する追加のモジュールのインストール
+RUN apt-get install -y  \
+    libpng-dev \
+    libxml2-dev
 
-# Node.js 18.x をインストール
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+# PHP拡張モジュールのインストール GD含む
+RUN docker-php-ext-install zip pdo_mysql gd xml
+
+# Node.js 22.x をインストール 22 or 24
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
  && apt-get install -y nodejs \
  && npm install -g npm vite vue
 

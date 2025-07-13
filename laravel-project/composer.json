@@ -11,7 +11,9 @@
         "laravel/breeze": "^2.3",
         "laravel/framework": "^11.31",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.9"
+        "laravel/tinker": "^2.9",
+        "maatwebsite/excel": "3.1.x-dev@dev",
+        "spatie/simple-excel": "^3.7"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.15",
