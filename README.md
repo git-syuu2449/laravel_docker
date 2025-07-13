@@ -32,8 +32,8 @@ Laravel 11をDocker環境(nginx,php,mysql)で構築し、主要な機能を動�
 | PHP         | 8.3.2.1             | Laravel実行用 |
 | MySQL       | 8.0.36              | データベース |
 | Nginx       | 1.24                | Webサーバー |
-| Node.js     | v18.20.8            | フロントエンドビルド |
-| Composer    | 2.8.9               | PHPパッケージ管理 |
+| Node.js     | v22.17.0            | フロントエンドビルド |
+| Composer    | 2.8.10              | PHPパッケージ管理 |
 | OS          | Ubuntu 25.02        | 開発ベース環境 |
 | Docker      | 28.1.1              | コンテナ実行環境 |
 | Docker Compose | 2.34             | コンテナオーケストレーション |

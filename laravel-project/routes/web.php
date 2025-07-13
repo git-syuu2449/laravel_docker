@@ -8,10 +8,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ChoiceController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RankingController;
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboradController;
 use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;
-use App\Http\Controllers\RankingController;
+use App\Http\Controllers\Admin\UsersController as AdminUsersController;
+
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // ログイン関連
@@ -57,11 +59,11 @@ Route::controller(QuestionController::class)
     Route::get('/', 'index')->name('index');
     Route::get('/create', 'create')->name('create');
     Route::get('/createA', 'createA')->name('createA');
-    Route::get('/{id}', 'show')->name('show');
+    Route::get('/{id:\d+}', 'show')->name('show');
     Route::post('/', 'store')->name('store');
 });
 
-Route::post(uri: '/questions/{id}/choices', action: [ChoiceController::class, 'store'])->name('choices.store')
+Route::post(uri: '/questions/{id:\d+}/choices', action: [ChoiceController::class, 'store'])->name('choices.store')
 ->middleware(['auth', 'verified', 'role:'.Role::User->value]);
 
 // ランキング
@@ -80,11 +82,22 @@ Route::get(uri: 'admin/dashboard',action:  [ AdminDashboradController::class, 'i
 ->name('admin.dashboard');
 
 Route::controller(AdminQuestionController::class)
-->prefix('admin.questions')
+->prefix('admin/questions')
 ->as('admin.questions.')
 ->middleware(['auth', 'verified', 'role:'.Role::Admin->value])
 ->group(function () {
     Route::get('/', 'index')->name('index');
-    Route::get('/{id}', 'show')->name('show');
+    Route::get('/{id:\d+}', 'show')->name('show');
     Route::post('/', 'store')->name('store');
+});
+
+Route::controller(AdminUsersController::class)
+->prefix('admin/users')
+->as('admin.users.')
+->middleware(['auth', 'verified', 'role:'.Role::Admin->value])
+->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/csv-export-simple-excel', 'csvExportSimpleExcel')->name('csvExportSimpleExcel'); // simple-excel
+    Route::get('/csv-export-laravel-excel', 'csvExportLaravelExcel')->name('csvExportLaravelExcel'); // Laravel-Excel
+    Route::get('/{id:\d+}', 'show')->name('show');
 });
