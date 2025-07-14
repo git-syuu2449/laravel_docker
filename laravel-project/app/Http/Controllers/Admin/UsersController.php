@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Services\Admin\Users\CsvExportSimpleExcelService;
+use App\Services\Admin\Users\CsvExportLaravelExcelService;
 
 class UsersController extends Controller
 {
@@ -30,8 +31,9 @@ class UsersController extends Controller
         return $service->download();
     }
 
-    public function csvExportLaravelExcel()
+    public function csvExportLaravelExcel(CsvExportLaravelExcelService $service)
     {
-        
+        Log::info("csvExportLaravelExcel");
+        return $service->download();
     }
 }
