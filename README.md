@@ -213,9 +213,16 @@ PMA_PORT=8080
 
 [Part10: テスト](docs/part10_test.md)
 
+[Part11: Export/Import](docs/part11_import_export.md)
+
 [PartX: その他](docs/part_x_other.md)
 
 [開発環境等](docs/開発環境.md)
 
 [ロードマップ](docs/ロードマップ.md)
 
+
+個人的なメモ：  
+2025/7/22  
+axiosで使用しているform-dataの4.0でセキュリティの脆弱性が見つかった為overrideで対応。  
+将来的にaxios側のform-dataのバージョンが更新されたら削除すること。

@@ -59,11 +59,11 @@ Route::controller(QuestionController::class)
     Route::get('/', 'index')->name('index');
     Route::get('/create', 'create')->name('create');
     Route::get('/createA', 'createA')->name('createA');
-    Route::get('/{id:\d+}', 'show')->name('show');
+    Route::get('/{id}', 'show')->name('show');
     Route::post('/', 'store')->name('store');
 });
 
-Route::post(uri: '/questions/{id:\d+}/choices', action: [ChoiceController::class, 'store'])->name('choices.store')
+Route::post(uri: '/questions/{id}/choices', action: [ChoiceController::class, 'store'])->name('choices.store')
 ->middleware(['auth', 'verified', 'role:'.Role::User->value]);
 
 // ランキング
@@ -87,7 +87,7 @@ Route::controller(AdminQuestionController::class)
 ->middleware(['auth', 'verified', 'role:'.Role::Admin->value])
 ->group(function () {
     Route::get('/', 'index')->name('index');
-    Route::get('/{id:\d+}', 'show')->name('show');
+    Route::get('/{id}', 'show')->name('show');
     Route::post('/', 'store')->name('store');
 });
 
@@ -99,5 +99,5 @@ Route::controller(AdminUsersController::class)
     Route::get('/', 'index')->name('index');
     Route::get('/csv-export-simple-excel', 'csvExportSimpleExcel')->name('csvExportSimpleExcel'); // simple-excel
     Route::get('/csv-export-laravel-excel', 'csvExportLaravelExcel')->name('csvExportLaravelExcel'); // Laravel-Excel
-    Route::get('/{id:\d+}', 'show')->name('show');
+    Route::get('/{id}', 'show')->name('show');
 });
