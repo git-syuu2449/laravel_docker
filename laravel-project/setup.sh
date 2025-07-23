@@ -19,7 +19,8 @@ npm install \
   @vitejs/plugin-vue \
   tailwindcss \
   postcss \
-  autoprefixer
+  autoprefixer \
+  js-cookie
 
 echo " Tailwind 初期設定"
 npx tailwindcss init -p
