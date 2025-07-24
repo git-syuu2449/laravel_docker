@@ -21,9 +21,5 @@
     },
     "dependencies": {
         "js-cookie": "^3.0.5"
-    },
-    "_comment": "CVE-2025-7783対応: form-dataを4.0.4で固定。axiosが対応したら削除予定",
-    "overrides": {
-      "form-data": "4.0.4"
     }
 }
