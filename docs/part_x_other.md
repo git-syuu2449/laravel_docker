@@ -42,3 +42,8 @@ collect([
 
 - 条件一致チェック
 `->contains(fn($item) => ...)`
+
+## パッケージ更新
+
+
+composer update {パッケージ名}
